@@ -14,14 +14,14 @@
       --text-muted: #8b9bb4;
       --accent: #10b981;
       --accent-dim: rgba(16, 185, 129, 0.15);
-      --accent-glow: rgba(16, 185, 129, 0.4);
+      --accent-glow: rgba(16, 185, 129, 0.35);
       --amber: #f59e0b;
       --amber-dim: rgba(245, 158, 11, 0.15);
       --blue: #3b82f6;
       --blue-dim: rgba(59, 130, 246, 0.15);
-      --blue-border: #1d4ed8;
       --red: #ef4444;
       --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
     }
 
     * {
@@ -40,12 +40,12 @@
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
-      padding-bottom: 90px; /* Space for sticky footer & floating timer */
+      padding-bottom: calc(76px + var(--safe-bottom));
     }
 
     /* Top Bar */
     header {
-      padding: 12px 16px;
+      padding: 10px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -60,15 +60,15 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       font-weight: 700;
-      font-size: 1.05rem;
+      font-size: 0.95rem;
       letter-spacing: 0.5px;
     }
 
     .brand span {
       color: var(--accent);
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       background: var(--accent-dim);
       padding: 2px 6px;
       border-radius: 4px;
@@ -84,12 +84,12 @@
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       color: var(--text-muted);
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 0.8rem;
+      padding: 6px 10px;
+      border-radius: 16px;
+      font-size: 0.78rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.15s;
     }
 
     .pill-btn.active {
@@ -101,13 +101,13 @@
     /* Main Container */
     main {
       flex: 1;
-      max-width: 680px;
+      max-width: 600px;
       width: 100%;
       margin: 0 auto;
-      padding: 16px;
+      padding: 12px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 12px;
     }
 
     /* Status Card */
@@ -115,29 +115,29 @@
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 14px 16px;
+      padding: 10px 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
     .status-info h2 {
-      font-size: 1.15rem;
+      font-size: 1.05rem;
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
     .status-info p {
-      font-size: 0.8rem;
+      font-size: 0.76rem;
       color: var(--text-muted);
-      margin-top: 3px;
+      margin-top: 2px;
     }
 
     .status-tag {
       font-family: var(--font-mono);
-      font-size: 0.75rem;
-      padding: 4px 8px;
+      font-size: 0.72rem;
+      padding: 3px 6px;
       border-radius: 6px;
       background: #1f2737;
       color: #93c5fd;
@@ -150,90 +150,83 @@
       background: var(--accent-dim);
       border: 1px dashed var(--accent);
       color: #a7f3d0;
-      padding: 12px 14px;
+      padding: 10px 12px;
       border-radius: 8px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       display: none;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       line-height: 1.4;
     }
 
     /* Floor Containers (空間分流視覺) */
     .floor-section {
-      border-radius: 16px;
-      padding: 14px;
-      margin-bottom: 8px;
-      border: 1px solid transparent;
+      border-radius: 14px;
+      padding: 12px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      transition: all 0.2s ease;
+      gap: 10px;
+      border: 1px solid transparent;
     }
 
     .floor-upstairs {
-      background: linear-gradient(180deg, rgba(30, 58, 138, 0.2) 0%, rgba(15, 23, 42, 0.4) 100%);
-      border-color: rgba(59, 130, 246, 0.35);
+      background: linear-gradient(180deg, rgba(30, 58, 138, 0.16) 0%, rgba(15, 23, 42, 0.3) 100%);
+      border-color: rgba(59, 130, 246, 0.3);
     }
 
     .floor-downstairs {
-      background: linear-gradient(180deg, rgba(6, 78, 59, 0.2) 0%, rgba(6, 40, 32, 0.4) 100%);
-      border-color: rgba(16, 185, 129, 0.35);
+      background: linear-gradient(180deg, rgba(6, 78, 59, 0.16) 0%, rgba(6, 40, 32, 0.3) 100%);
+      border-color: rgba(16, 185, 129, 0.3);
     }
 
     .floor-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 4px;
+      padding: 2px 2px 4px 2px;
     }
 
     .floor-title-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      font-size: 0.9rem;
+      gap: 5px;
+      font-size: 0.82rem;
       font-weight: 700;
-      letter-spacing: 0.5px;
-      padding: 4px 10px;
-      border-radius: 8px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.3px;
     }
 
     .badge-blue {
       background: rgba(59, 130, 246, 0.2);
       color: #93c5fd;
-      border: 1px solid rgba(59, 130, 246, 0.5);
+      border: 1px solid rgba(59, 130, 246, 0.4);
     }
 
     .badge-green {
       background: rgba(16, 185, 129, 0.2);
       color: #6ee7b7;
-      border: 1px solid rgba(16, 185, 129, 0.5);
+      border: 1px solid rgba(16, 185, 129, 0.4);
     }
 
     .floor-hint {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: var(--text-muted);
     }
 
-    /* Floor Transition Card (轉場提醒) */
+    /* Floor Transition Card */
     .floor-transition-card {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      padding: 12px 16px;
+      gap: 8px;
+      padding: 10px 14px;
       background: #111827;
       border: 1px dashed #374151;
-      border-radius: 12px;
-      color: #e5e7eb;
-      font-size: 0.85rem;
+      border-radius: 10px;
+      color: #d1d5db;
+      font-size: 0.8rem;
       font-weight: 600;
-      text-align: center;
-    }
-
-    .floor-transition-card span.icon {
-      font-size: 1.2rem;
     }
 
     /* Exercise Card */
@@ -241,29 +234,26 @@
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 14px;
-      transition: border-color 0.2s;
-    }
-
-    .exercise-card.active-target {
-      border-color: var(--accent);
-      box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
     .ex-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 8px;
-      margin-bottom: 8px;
+      gap: 6px;
     }
 
     .ex-title-wrap {
       flex: 1;
+      min-width: 0;
     }
 
     .ex-title {
-      font-size: 1.05rem;
+      font-size: 0.98rem;
       font-weight: 700;
       display: flex;
       align-items: center;
@@ -272,17 +262,16 @@
     }
 
     .ex-tag {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 600;
-      padding: 2px 6px;
+      padding: 1px 5px;
       border-radius: 4px;
       background: #1e2638;
       color: #94a3b8;
       white-space: nowrap;
     }
 
-    /* Card Order & Action Controls */
-    .card-order-controls {
+    .card-actions {
       display: flex;
       align-items: center;
       gap: 4px;
@@ -290,8 +279,8 @@
     }
 
     .icon-btn {
-      background: #1f2737;
-      border: 1px solid #2d3748;
+      background: #1c2333;
+      border: 1px solid #2b364d;
       color: #94a3b8;
       border-radius: 6px;
       width: 28px;
@@ -299,57 +288,32 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       cursor: pointer;
       transition: all 0.15s;
     }
 
-    .icon-btn:hover {
-      background: #2b364d;
-      color: #fff;
-    }
-
     .icon-btn:active {
       transform: scale(0.92);
+      background: #2b364d;
     }
 
-    /* External Focus Cues Badges */
-    .cue-badges {
+    /* Primary External Focus Cue */
+    .focus-cue-row {
       display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      margin-top: 6px;
-    }
-
-    .cue-badge {
-      font-size: 0.72rem;
-      font-weight: 600;
-      padding: 2px 8px;
+      align-items: baseline;
+      gap: 5px;
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.2);
       border-radius: 6px;
-      background: rgba(245, 158, 11, 0.12);
+      padding: 5px 8px;
+      font-size: 0.76rem;
       color: #fcd34d;
-      border: 1px solid rgba(245, 158, 11, 0.3);
-      white-space: nowrap;
+      line-height: 1.35;
     }
 
-    .cue-badge.alert {
-      background: rgba(239, 68, 68, 0.12);
-      color: #fca5a5;
-      border-color: rgba(239, 68, 68, 0.3);
-    }
-
-    .btn-toggle-guide {
-      font-size: 0.72rem;
-      background: #1e2638;
-      border: 1px solid #334155;
-      color: #93c5fd;
-      padding: 2px 8px;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-top: 6px;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
+    .focus-cue-row span.icon {
+      flex-shrink: 0;
     }
 
     /* Guide Collapsible Drawer */
@@ -358,10 +322,9 @@
       background: #0d121c;
       border: 1px solid #1e293b;
       border-radius: 8px;
-      padding: 10px 12px;
-      margin-top: 8px;
-      font-size: 0.8rem;
-      line-height: 1.5;
+      padding: 10px;
+      font-size: 0.76rem;
+      line-height: 1.45;
       animation: fadeIn 0.2s ease;
     }
 
@@ -380,24 +343,20 @@
     .guide-label {
       font-weight: 700;
       color: #38bdf8;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      margin-bottom: 2px;
+      margin-bottom: 1px;
     }
 
     .guide-text {
       color: #cbd5e1;
-      padding-left: 14px;
+      padding-left: 10px;
     }
 
-    /* Equipment & Weight Selection Toolbar */
-    .equip-selector-bar {
+    /* Equipment & Rest Compact Selector Bar */
+    .compact-selector-bar {
       background: #0d111a;
-      border: 1px solid #1f2737;
+      border: 1px solid #1e2638;
       border-radius: 8px;
-      padding: 8px 10px;
-      margin-top: 10px;
+      padding: 6px 8px;
       display: flex;
       flex-direction: column;
       gap: 6px;
@@ -406,15 +365,23 @@
     .selector-row {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       flex-wrap: wrap;
     }
 
     .selector-label {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       color: var(--text-muted);
-      min-width: 44px;
+      min-width: 38px;
       font-weight: 600;
+    }
+
+    .pills-group {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      flex-wrap: wrap;
+      flex: 1;
     }
 
     .pill-opt {
@@ -423,10 +390,10 @@
       background: #182030;
       border: 1px solid #28344c;
       color: #94a3b8;
-      padding: 3px 8px;
-      border-radius: 6px;
+      padding: 3px 7px;
+      border-radius: 5px;
       cursor: pointer;
-      transition: all 0.15s;
+      transition: all 0.12s;
     }
 
     .pill-opt.active {
@@ -440,72 +407,54 @@
       transform: scale(0.95);
     }
 
-    /* Rest Interval Selector */
-    .rest-selector-row {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 6px;
-      padding-top: 6px;
-      border-top: 1px dashed #1c2436;
-      flex-wrap: wrap;
-    }
-
-    /* Sets Table */
+    /* Sets Table (Zero Horizontal Overflow, 276px Total Width) */
     .sets-table {
       width: 100%;
-      margin-top: 10px;
       border-collapse: collapse;
+      margin-top: 2px;
     }
 
     .set-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 8px 0;
-      border-top: 1px solid #1c2333;
+      padding: 6px 0;
+      border-top: 1px solid #1a2232;
       gap: 8px;
     }
 
     .set-num {
       font-family: var(--font-mono);
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--text-muted);
-      width: 44px;
+      width: 48px;
       flex-shrink: 0;
     }
 
-    .set-inputs {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex: 1;
-      justify-content: center;
-    }
-
-    .input-pill {
+    .set-reps-control {
       display: flex;
       align-items: center;
       background: #0d111a;
       border: 1px solid #232b3e;
       border-radius: 8px;
       overflow: hidden;
+      flex-shrink: 0;
     }
 
-    .input-pill input {
+    .reps-input {
       background: transparent;
       border: none;
       color: #fff;
       font-family: var(--font-mono);
       font-size: 16px; /* Lock 16px to prevent iOS auto-zoom */
       font-weight: 700;
-      width: 58px;
+      width: 42px;
       text-align: center;
       padding: 6px 0;
     }
 
-    .input-pill span {
-      font-size: 0.75rem;
+    .unit-label {
+      font-size: 0.74rem;
       color: var(--text-muted);
       padding-right: 6px;
     }
@@ -514,15 +463,15 @@
       background: #1c2333;
       color: #cbd5e1;
       border: none;
-      width: 40px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       font-weight: 800;
       font-size: 1.1rem;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.15s;
+      transition: background 0.12s;
     }
 
     .adj-btn:active {
@@ -531,7 +480,7 @@
     }
 
     .set-action {
-      width: 76px;
+      width: 72px;
       text-align: right;
       flex-shrink: 0;
     }
@@ -540,10 +489,10 @@
       background: #1c2333;
       border: 1px solid #2b364d;
       color: var(--text-muted);
-      border-radius: 8px;
-      height: 38px;
+      border-radius: 7px;
+      height: 36px;
       width: 100%;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.15s;
@@ -555,26 +504,26 @@
       color: #042f2e;
     }
 
-    /* Bottom Floating Timer HUD (底部常駐懸浮膠囊) */
+    /* Floating Rest Timer HUD (底部避讓 Safe Area) */
     .timer-floating-hud {
       position: fixed;
-      bottom: 74px;
-      left: 16px;
-      right: 16px;
-      max-width: 648px;
+      bottom: calc(64px + var(--safe-bottom));
+      left: 12px;
+      right: 12px;
+      max-width: 576px;
       margin: 0 auto;
-      background: rgba(18, 23, 34, 0.95);
+      background: rgba(18, 23, 34, 0.96);
       border: 2px solid var(--accent);
-      box-shadow: 0 0 24px var(--accent-glow), 0 8px 32px rgba(0,0,0,0.6);
+      box-shadow: 0 0 20px var(--accent-glow), 0 8px 24px rgba(0,0,0,0.5);
       backdrop-filter: blur(12px);
-      border-radius: 16px;
-      padding: 12px 16px;
+      border-radius: 14px;
+      padding: 10px 14px;
       display: none;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 10px;
       z-index: 80;
-      animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      animation: slideUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .timer-floating-hud.active {
@@ -584,20 +533,22 @@
     .timer-info-block {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 1px;
     }
 
     .timer-title {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      font-size: 0.72rem;
       color: #a7f3d0;
       font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 180px;
     }
 
     .timer-clock {
       font-family: var(--font-mono);
-      font-size: 2.2rem;
+      font-size: 1.9rem;
       font-weight: 800;
       line-height: 1;
       color: #fff;
@@ -606,20 +557,20 @@
     .timer-controls {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
 
     .btn {
       border: none;
-      border-radius: 8px;
-      padding: 8px 14px;
+      border-radius: 7px;
+      padding: 7px 12px;
       font-weight: 600;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.15s;
+      transition: all 0.12s;
     }
 
     .btn:active {
@@ -645,17 +596,16 @@
     .zone2-card {
       background: linear-gradient(145deg, #121824, #0d121c);
       border: 1px solid #223049;
-      border-radius: 16px;
-      padding: 18px;
+      border-radius: 12px;
+      padding: 14px;
       text-align: center;
       position: relative;
-      overflow: hidden;
     }
 
     .breath-circle-wrap {
-      width: 120px;
-      height: 120px;
-      margin: 12px auto;
+      width: 100px;
+      height: 100px;
+      margin: 8px auto;
       position: relative;
       display: flex;
       align-items: center;
@@ -663,24 +613,24 @@
     }
 
     .breath-circle {
-      width: 86px;
-      height: 86px;
+      width: 76px;
+      height: 76px;
       border-radius: 50%;
       background: var(--accent-dim);
       border: 2px solid var(--accent);
-      box-shadow: 0 0 16px var(--accent-glow);
+      box-shadow: 0 0 14px var(--accent-glow);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      font-size: 0.8rem;
+      font-size: 0.74rem;
       color: var(--accent);
       transition: transform 4s ease-in-out;
     }
 
     .breath-circle.inhale {
-      transform: scale(1.3);
-      background: rgba(16, 185, 129, 0.3);
+      transform: scale(1.26);
+      background: rgba(16, 185, 129, 0.28);
     }
 
     .breath-circle.exhale {
@@ -690,9 +640,10 @@
 
     /* Sticky Footer */
     footer {
-      padding: 12px 16px;
-      padding-bottom: max(12px, env(safe-area-inset-bottom));
-      background: rgba(20, 24, 34, 0.95);
+      padding: 10px 16px;
+      padding-bottom: calc(10px + var(--safe-bottom));
+      height: calc(56px + var(--safe-bottom));
+      background: rgba(20, 24, 34, 0.96);
       backdrop-filter: blur(8px);
       border-top: 1px solid var(--card-border);
       display: flex;
@@ -703,12 +654,12 @@
       left: 0;
       right: 0;
       z-index: 70;
-      max-width: 680px;
+      max-width: 600px;
       margin: 0 auto;
     }
 
     @keyframes slideUp {
-      from { opacity: 0; transform: translateY(16px); }
+      from { opacity: 0; transform: translateY(12px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -738,23 +689,23 @@
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      max-width: 440px;
+      max-width: 420px;
       width: 100%;
-      padding: 20px;
+      padding: 18px;
       max-height: 90vh;
       overflow-y: auto;
     }
 
     .setting-group {
-      margin-bottom: 14px;
-      padding-bottom: 12px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
       border-bottom: 1px solid #1e2638;
     }
 
     .setting-group h4 {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: #93c5fd;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .setting-input {
@@ -762,10 +713,10 @@
       background: #0d111a;
       border: 1px solid #2b364d;
       color: #fff;
-      padding: 8px;
+      padding: 7px;
       border-radius: 6px;
-      font-size: 0.85rem;
-      margin-top: 4px;
+      font-size: 0.82rem;
+      margin-top: 3px;
       font-family: var(--font-mono);
     }
   </style>
@@ -801,14 +752,14 @@
       🔥 <span id="progress-banner-text">目標達成！已解鎖下一次升重門檻。</span>
     </div>
 
-    <!-- Dynamic Workout Content (樓層分流由 JS 渲染) -->
+    <!-- Dynamic Workout Content -->
     <div id="workout-content">
       <!-- Injected by JavaScript -->
     </div>
 
   </main>
 
-  <!-- Floating Rest Timer HUD (底部常駐懸浮膠囊) -->
+  <!-- Floating Rest Timer HUD (避讓底部安全區) -->
   <div class="timer-floating-hud" id="timer-hud">
     <div class="timer-info-block">
       <div class="timer-title" id="timer-label">組間休息倒數</div>
@@ -824,10 +775,10 @@
   <!-- Sticky Bottom Finish Bar -->
   <footer>
     <div>
-      <div style="font-size: 0.72rem; color: var(--text-muted);">本輪進度</div>
-      <div style="font-size: 0.95rem; font-weight: 700;" id="completion-counter">0 / 12 組完成</div>
+      <div style="font-size: 0.7rem; color: var(--text-muted);">本輪進度</div>
+      <div style="font-size: 0.92rem; font-weight: 700;" id="completion-counter">0 / 12 組完成</div>
     </div>
-    <button class="btn btn-accent" style="padding: 10px 20px; font-size: 0.95rem;" onclick="finishWorkoutSession()">
+    <button class="btn btn-accent" style="padding: 8px 18px; font-size: 0.9rem;" onclick="finishWorkoutSession()">
       完結今日課表 🏆
     </button>
   </footer>
@@ -835,23 +786,23 @@
   <!-- Modal: Settings & Data Backup -->
   <div class="modal-overlay" id="backup-modal" onclick="closeBackupModal(event)">
     <div class="modal-box" onclick="event.stopPropagation()">
-      <h3 style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+      <h3 style="margin-bottom: 10px; font-size: 1rem; display: flex; align-items: center; gap: 6px;">
         ⚙️ 器材規格與數據管理
       </h3>
 
       <div class="setting-group">
-        <h4>🏋️ 可調壺鈴 4 段重量 (kg)</h4>
-        <p style="font-size: 0.75rem; color: var(--text-muted);">請用逗號分隔 4 個段位數值</p>
-        <input type="text" class="setting-input" id="cfg-kb-weights" value="12, 16, 20, 24" onchange="saveCustomConfig()">
+        <h4>🏋️ 可調壺鈴 5 段重量 (kg)</h4>
+        <p style="font-size: 0.72rem; color: var(--text-muted);">請用逗號分隔 5 個段位數值</p>
+        <input type="text" class="setting-input" id="cfg-kb-weights" value="8, 12, 16, 20, 24" onchange="saveCustomConfig()">
       </div>
 
       <div class="setting-group">
         <h4>🎗️ 彈力帶 4 強度標籤</h4>
-        <p style="font-size: 0.75rem; color: var(--text-muted);">請用逗號分隔 4 個強度色號或名稱</p>
+        <p style="font-size: 0.72rem; color: var(--text-muted);">請用逗號分隔 4 個強度色號或名稱</p>
         <input type="text" class="setting-input" id="cfg-band-levels" value="極輕, 輕阻力, 中阻力, 重阻力" onchange="saveCustomConfig()">
       </div>
 
-      <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 14px;">
+      <div style="display: flex; flex-direction: column; gap: 7px; margin-top: 12px;">
         <button class="btn btn-secondary" onclick="exportDataJson()">📥 匯出紀錄備份 (JSON)</button>
         <label class="btn btn-secondary" style="cursor: pointer; text-align: center;">
           📤 匯入備份檔案
@@ -868,10 +819,10 @@
     // 1. DATA SCHEMA & EXERCISE TEMPLATES
     // ==========================================
     const DEFAULT_CONFIG = {
-      kbLevels: [12, 16, 20, 24],
+      kbLevels: [8, 12, 16, 20, 24], // 升級為 5 段重量
       bandLevels: ["極輕", "輕阻力", "中阻力", "重阻力"],
       bandRings: [1, 2, 3, 4, 5, 6, 7],
-      restOptions: [30, 45, 60, 90, 120]
+      restOptions: [30, 45, 60, 90]
     };
 
     const TEMPLATES = {
@@ -890,7 +841,7 @@
               targetReps: "8–12下",
               defaultReps: 10,
               defaultRest: 60,
-              cues: ["🎯 掌心推穿地板", "🎯 頂峰胸腔推離地板迎天花板", "⚠️ 骨盆不可下墜塌腰"],
+              cue: "掌心推穿地板，頂峰胸腔推離地面迎向天花板",
               guide: {
                 focus: "想像掌心如千斤頂把地板推開；推至頂峰時，將肩胛骨完全前引，胸口遠離地面衝向天花板，啟動前鋸肌。",
                 breath: "下沉吸氣（2秒），推起用力時由嘴吐氣發力（1秒）。",
@@ -906,7 +857,7 @@
               targetReps: "12–15下",
               defaultReps: 12,
               defaultRest: 45,
-              cues: ["🎯 手肘往兩側牆壁推", "🎯 微朝斜前 30 度角", "⚠️ 手肘不超過肩膀高度"],
+              cue: "手肘往兩側牆壁推，微朝斜前 30 度角",
               guide: {
                 focus: "注意力放在手肘：想像把兩手手肘推向左右兩側的牆面，而非主動提腕；在肩胛骨平面（斜前 30°）滑行。",
                 breath: "向外推起時吐氣，緩慢回落時吸氣延展。",
@@ -915,14 +866,14 @@
             },
             {
               id: "a_deadbug",
-              name: "核心死蟲式 / 門錨彈力繩前推",
+              name: "核心死蟲式 / 門錨前推",
               tag: "核心抗伸展 / 保護腰椎",
               toolType: "bodyweight",
               defaultWeight: "徒手/輕繩",
               targetReps: "每側10–12下",
               defaultReps: 10,
               defaultRest: 45,
-              cues: ["🎯 下背死壓地面零縫隙", "🎯 對側腳蹬向遠方牆壁", "⚠️ 下背絕不可浮起空隙"],
+              cue: "下背死壓地面零縫隙，對側腳蹬向遠方牆壁",
               guide: {
                 focus: "想像地板與下背之間夾著一張紙，任何時刻都無法抽走；對側腳跟如蹬車般朝遠方牆壁踢出，腹壁 360 度充氣抵抗伸展。",
                 breath: "蹬腿向外時拉長吐氣，收回時鼻吸氣重整腹內壓。",
@@ -940,11 +891,11 @@
               name: "原地負重分腿蹲",
               tag: "膝主導 / 離心拉伸髂腰肌",
               toolType: "kettlebell",
-              defaultWeight: 16,
+              defaultWeight: "16kg",
               targetReps: "每側8–12下",
               defaultReps: 10,
-              defaultRest: 75,
-              cues: ["🎯 前腳掌三點踩穿地板", "🎯 軀幹前傾15度如滑雪", "🎯 後膝垂直軟著陸"],
+              defaultRest: 60,
+              cue: "前腳掌三點踩穿地板，軀幹前傾15度如滑雪，後膝垂直軟著陸",
               guide: {
                 focus: "前腳掌大拇指球、小拇指球與腳跟三點釘死地面；軀幹前傾 15°，引導臀大肌吃重；後腿膝蓋垂直向下沉降軟著陸，感受後髖前側（髂腰肌）受控拉伸。",
                 breath: "下沉吸氣蓄壓，蹬起推離地面時吐氣發力。",
@@ -956,11 +907,11 @@
               name: "壺鈴單臂仰臥頭顱破壞者",
               tag: "肱三頭肌長頭 / 單臂抗扭",
               toolType: "kettlebell",
-              defaultWeight: 12,
+              defaultWeight: "12kg",
               targetReps: "每側8–12下",
               defaultReps: 10,
-              defaultRest: 60,
-              cues: ["🎯 上臂如柱釘死天花板微後傾", "🎯 壺鈴沉向耳側地面", "⚠️ 手肘不可向外爆開"],
+              defaultRest: 45,
+              cue: "上臂如柱釘死天花板微後傾，壺鈴沉向耳側地面後筆直推回",
               guide: {
                 focus: "仰臥於地，單手握把手，大臂垂直地面並微向頭頂後傾 10° 保持張力；手肘為唯一固定軸心，壺鈴下放至耳邊地板，再筆直推回鎖定。",
                 breath: "下放時慢吸氣 2 秒，向上伸展推起時吐氣。",
@@ -985,7 +936,7 @@
               targetReps: "12–15下",
               defaultReps: 12,
               defaultRest: 45,
-              cues: ["🎯 拳頭拉向耳側手背後轉", "🎯 肩胛中間夾住網球", "⚠️ 頭頸不前伸探頭"],
+              cue: "拳頭拉向耳側手背後轉，肩胛骨中間死死夾住網球",
               guide: {
                 focus: "門錨固定於額頭高度；雙手抓繩後拉至面部兩側，手背向後旋轉（雙二頭肌展示姿態）；想像兩側肩胛骨中間死死夾住一顆網球。",
                 breath: "向後外旋拉開時吐氣並停頓 1 秒，緩慢回放時吸氣。",
@@ -1001,7 +952,7 @@
               targetReps: "每側10–12下",
               defaultReps: 10,
               defaultRest: 45,
-              cues: ["🎯 沿滑軌水平推穿前方牆壁", "🎯 頂峰停頓 2 秒抗側扭", "⚠️ 骨盆肩膀鎖死正前方"],
+              cue: "沿滑軌水平推穿前方牆壁，頂峰停頓 2 秒抗側扭",
               guide: {
                 focus: "雙腳抓地如樹根，胸口與骨盆鎖定靶心；將雙手由胸前沿水平軌道筆直推向前方牆面，在手臂伸直頂峰停頓 2 秒，抵抗側向拉扯扭矩。",
                 breath: "向前推直時吐氣閉鎖氣筒，收回胸前時吸氣重整。",
@@ -1019,11 +970,11 @@
               name: "壺鈴羅馬尼亞硬舉 (RDL)",
               tag: "髖主導 / 後側鉸鏈與臀大肌",
               toolType: "kettlebell",
-              defaultWeight: 20,
+              defaultWeight: "20kg",
               targetReps: "8–12下",
               defaultReps: 10,
-              defaultRest: 75,
-              cues: ["🎯 屁股撞關身後30公分的門", "🎯 雙腳把地板撕開", "⚠️ 膝蓋不前蹲·腰不找地"],
+              defaultRest: 60,
+              cue: "屁股撞關身後30公分的門，雙腳把地面撕開",
               guide: {
                 focus: "雙手握把手，想像身後 30 公分有一扇門，用屁股往後撞關它；壺鈴貼緊小腿脛骨垂降，雙腳向外撕開地板感受臀部與膕繩肌緊繃張力。",
                 breath: "折髖後推時深吸腹壓，用臀部撞回直立時由嘴呼氣。",
@@ -1035,11 +986,11 @@
               name: "可調壺鈴單臂划船",
               tag: "闊背肌 / 上背厚度與抗旋",
               toolType: "kettlebell",
-              defaultWeight: 16,
+              defaultWeight: "16kg",
               targetReps: "每側8–12下",
               defaultReps: 10,
               defaultRest: 60,
-              cues: ["🎯 支撐手推緊成平坦桌面", "🎯 手肘如發動割草機拉向口袋", "⚠️ 軀幹不翻轉甩動"],
+              cue: "支撐手推緊成平坦桌面，手肘如割草機拉向後口袋",
               guide: {
                 focus: "支撐手推實椅子或膝蓋，脊柱延伸成桌面；手肘像拉割草機發動繩一樣，朝同側骨盆後口袋弧線拉回，頂峰夾緊闊背肌。",
                 breath: "手肘向後拉時吐氣發力，向下延展下放時慢吸氣。",
@@ -1051,11 +1002,11 @@
               name: "壺鈴單臂二頭彎舉",
               tag: "肱二頭肌 / 單側核心抗側屈",
               toolType: "kettlebell",
-              defaultWeight: 12,
+              defaultWeight: "12kg",
               targetReps: "每側8–12下",
               defaultReps: 10,
               defaultRest: 45,
-              cues: ["🎯 手肘膠水黏在肋骨側邊", "🎯 拳頭劃弧朝肩膀前側提", "⚠️ 慢放2-3秒·骨盆不甩動"],
+              cue: "手肘膠水黏在肋骨側邊，拳頭劃弧朝肩膀前側提，慢放2-3秒",
               guide: {
                 focus: "站姿單手握把手，對側核心收緊抗側傾；肘關節固定於側腹，手腕中立，將壺鈴沿圓弧拉至胸前鎖骨高度，頂峰稍作擠壓。",
                 breath: "彎舉向上時吐氣，緩慢離心下沉時吸氣 2-3 秒。",
@@ -1067,7 +1018,8 @@
       }
     };
 
-    const STORAGE_KEY = "WORKOUT_HUD_STORE_V3";
+    // 永久鎖定 Storage Key，並提供跨版本向下相容平滑遷移
+    const STORAGE_KEY = "WORKOUT_HUD_STORE_PERMANENT";
 
     let state = {
       activeDay: null,
@@ -1143,15 +1095,20 @@
     }
 
     // ==========================================
-    // 4. PERSISTENCE & MIGRATION
+    // 4. PERSISTENCE & AUTO-MIGRATION (永不重置)
     // ==========================================
     function loadState() {
-      const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("WORKOUT_HUD_STORE_V2");
+      const raw = localStorage.getItem(STORAGE_KEY) || 
+                  localStorage.getItem("WORKOUT_HUD_STORE_V3") || 
+                  localStorage.getItem("WORKOUT_HUD_STORE_V2");
       if (raw) {
         try {
           const parsed = JSON.parse(raw);
           state = { ...state, ...parsed };
           if (!state.config) state.config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+          if (!state.config.kbLevels || state.config.kbLevels.length !== 5) {
+            state.config.kbLevels = [8, 12, 16, 20, 24];
+          }
           if (!state.customOrder) state.customOrder = { A: [], B: [] };
         } catch (e) {
           console.error("Failed to parse storage", e);
@@ -1160,6 +1117,7 @@
       if (!state.activeDay) {
         state.activeDay = (state.lastCompletedDay === "A") ? "B" : "A";
       }
+      saveState(); // 將舊版本資料自動平滑遷移至永久 Key
     }
 
     function saveState() {
@@ -1315,7 +1273,7 @@
     }
 
     // ==========================================
-    // 7. RENDER ENGINE & INTERACTION
+    // 7. RENDER ENGINE & COMPACT INTERACTIONS
     // ==========================================
     function switchWorkout(day) {
       state.activeDay = day;
@@ -1323,13 +1281,11 @@
       renderAll();
     }
 
-    // 取得當前日期的動作清單（含排序處理）
     function getExercisesForFloor(day, floorKey) {
       const defaultList = TEMPLATES[day][floorKey].exercises;
       const orderList = state.customOrder[day] || [];
       if (orderList.length === 0) return [...defaultList];
 
-      // 依 customOrder 排序，未列出的依原本順序放後方
       const sorted = [];
       orderList.forEach(id => {
         const found = defaultList.find(e => e.id === id);
@@ -1353,12 +1309,10 @@
       const newIdx = idx + direction;
       if (newIdx < 0 || newIdx >= currentList.length) return;
 
-      // Swap in array
       const temp = currentList[idx];
       currentList[idx] = currentList[newIdx];
       currentList[newIdx] = temp;
 
-      // Update state.customOrder for this day
       const otherFloorKey = (floorKey === "floor1") ? "floor2" : "floor1";
       const otherList = getExercisesForFloor(day, otherFloorKey);
       
@@ -1395,37 +1349,46 @@
       const container = document.getElementById("workout-content");
       let html = "";
 
-      // 渲染單個動作卡片
+      // 渲染單個動作卡片 (Mobile-First 緊湊無溢出架構)
       const renderCard = (ex, fIdx, fTotal) => {
         if (!state.records[ex.id]) {
           initExerciseRecord(ex.id);
         }
         const rec = state.records[ex.id];
-        const restSec = rec.restAfter || ex.defaultRest || 60;
+        const restSec = rec.restAfter || ex.defaultRest || 45;
 
-        let cueHtml = "";
-        if (ex.cues) {
-          cueHtml = ex.cues.map(c => `<span class="cue-badge ${c.startsWith('⚠️') ? 'alert' : ''}">${c}</span>`).join('');
-        }
+        // 緊湊單一外部焦點展示
+        const cueHtml = ex.cue ? `
+          <div class="focus-cue-row">
+            <span class="icon">🎯</span>
+            <span>${ex.cue}</span>
+          </div>
+        ` : '';
 
+        // 器材與休息緊湊分段器
         let selectorHtml = "";
         if (ex.toolType === "kettlebell") {
           const kbWeights = state.config.kbLevels || DEFAULT_CONFIG.kbLevels;
+          const curKg = parseFloat(rec.weight) || 12;
           selectorHtml = `
-            <div class="equip-selector-bar">
+            <div class="compact-selector-bar">
               <div class="selector-row">
-                <span class="selector-label">壺鈴段位:</span>
-                ${kbWeights.map(w => `
-                  <button class="pill-opt ${parseFloat(rec.weight) === w ? 'active' : ''}" 
-                    onclick="selectKbWeight('${ex.id}', ${w})">${w}kg</button>
-                `).join('')}
+                <span class="selector-label">重量:</span>
+                <div class="pills-group">
+                  ${kbWeights.map(w => `
+                    <button class="pill-opt ${curKg === w ? 'active' : ''}" 
+                      onclick="selectKbWeight('${ex.id}', ${w})">${w}kg</button>
+                  `).join('')}
+                </div>
               </div>
-              <div class="rest-selector-row">
-                <span class="selector-label">組間休息:</span>
-                ${state.config.restOptions.map(r => `
-                  <button class="pill-opt ${restSec === r ? 'active' : ''}" 
-                    onclick="setExerciseRest('${ex.id}', ${r})">${r}s</button>
-                `).join('')}
+              <div class="selector-row">
+                <span class="selector-label">休息:</span>
+                <div class="pills-group">
+                  ${state.config.restOptions.map(r => `
+                    <button class="pill-opt ${restSec === r ? 'active' : ''}" 
+                      onclick="setExerciseRest('${ex.id}', ${r})">${r}s</button>
+                  `).join('')}
+                </div>
               </div>
             </div>
           `;
@@ -1443,45 +1406,54 @@
           }
 
           selectorHtml = `
-            <div class="equip-selector-bar">
+            <div class="compact-selector-bar">
               <div class="selector-row">
-                <span class="selector-label">阻力強度:</span>
-                ${bandLevels.map(b => `
-                  <button class="pill-opt ${curBand === b ? 'active' : ''}" 
-                    onclick="selectBandConfig('${ex.id}', '${b}', ${curRing})">${b}</button>
-                `).join('')}
+                <span class="selector-label">強度:</span>
+                <div class="pills-group">
+                  ${bandLevels.map(b => `
+                    <button class="pill-opt ${curBand === b ? 'active' : ''}" 
+                      onclick="selectBandConfig('${ex.id}', '${b}', ${curRing})">${b}</button>
+                  `).join('')}
+                </div>
               </div>
               <div class="selector-row">
-                <span class="selector-label">扣環段位:</span>
-                ${bandRings.map(r => `
-                  <button class="pill-opt ${curRing === r ? 'active' : ''}" 
-                    onclick="selectBandConfig('${ex.id}', '${curBand}', ${r})">R${r}</button>
-                `).join('')}
+                <span class="selector-label">環位:</span>
+                <div class="pills-group">
+                  ${bandRings.map(r => `
+                    <button class="pill-opt ${curRing === r ? 'active' : ''}" 
+                      onclick="selectBandConfig('${ex.id}', '${curBand}', ${r})">R${r}</button>
+                  `).join('')}
+                </div>
               </div>
-              <div class="rest-selector-row">
-                <span class="selector-label">組間休息:</span>
-                ${state.config.restOptions.map(r => `
-                  <button class="pill-opt ${restSec === r ? 'active' : ''}" 
-                    onclick="setExerciseRest('${ex.id}', ${r})">${r}s</button>
-                `).join('')}
+              <div class="selector-row">
+                <span class="selector-label">休息:</span>
+                <div class="pills-group">
+                  ${state.config.restOptions.map(r => `
+                    <button class="pill-opt ${restSec === r ? 'active' : ''}" 
+                      onclick="setExerciseRest('${ex.id}', ${r})">${r}s</button>
+                  `).join('')}
+                </div>
               </div>
             </div>
           `;
         } else {
           // Bodyweight or general
           selectorHtml = `
-            <div class="equip-selector-bar">
-              <div class="rest-selector-row" style="margin-top:0; padding-top:0; border-top:none;">
-                <span class="selector-label">組間休息:</span>
-                ${state.config.restOptions.map(r => `
-                  <button class="pill-opt ${restSec === r ? 'active' : ''}" 
-                    onclick="setExerciseRest('${ex.id}', ${r})">${r}s</button>
-                `).join('')}
+            <div class="compact-selector-bar">
+              <div class="selector-row">
+                <span class="selector-label">休息:</span>
+                <div class="pills-group">
+                  ${state.config.restOptions.map(r => `
+                    <button class="pill-opt ${restSec === r ? 'active' : ''}" 
+                      onclick="setExerciseRest('${ex.id}', ${r})">${r}s</button>
+                  `).join('')}
+                </div>
               </div>
             </div>
           `;
         }
 
+        // 組別列：消除重複重量輸入，極度緊湊抗爆版 (總寬度收斂至 276px)
         return `
           <div class="exercise-card" id="card-${ex.id}">
             <div class="ex-header">
@@ -1489,16 +1461,15 @@
                 <div class="ex-title">
                   ${ex.name} <span class="ex-tag">${ex.tag}</span>
                 </div>
-                <div class="cue-badges">${cueHtml}</div>
-                <button class="btn-toggle-guide" onclick="toggleGuideDrawer('${ex.id}')">
-                  ℹ️ 外部焦點與要領
-                </button>
               </div>
-              <div class="card-order-controls">
+              <div class="card-actions">
                 <button class="icon-btn" onclick="moveExercise('${ex.id}', -1)" title="向上排序" ${fIdx === 0 ? 'disabled style="opacity:0.3;"' : ''}>▲</button>
                 <button class="icon-btn" onclick="moveExercise('${ex.id}', 1)" title="向下排序" ${fIdx === fTotal - 1 ? 'disabled style="opacity:0.3;"' : ''}>▼</button>
+                <button class="icon-btn" onclick="toggleGuideDrawer('${ex.id}')" title="外部焦點要點">ℹ️</button>
               </div>
             </div>
+
+            ${cueHtml}
 
             <div class="guide-drawer" id="guide-${ex.id}">
               <div class="guide-block">
@@ -1521,18 +1492,11 @@
               ${rec.sets.map((set, sIdx) => `
                 <div class="set-row">
                   <span class="set-num">第 ${sIdx + 1} 組</span>
-                  <div class="set-inputs">
-                    <div class="input-pill">
-                      <button class="adj-btn" onclick="adjWeight('${ex.id}', -1)">-</button>
-                      <input type="text" value="${rec.weight}" onchange="setWeight('${ex.id}', this.value)" title="負重/阻力">
-                      <button class="adj-btn" onclick="adjWeight('${ex.id}', 1)">+</button>
-                    </div>
-                    <div class="input-pill">
-                      <button class="adj-btn" onclick="adjReps('${ex.id}', ${sIdx}, -1)">-</button>
-                      <input type="number" value="${set.reps}" onchange="setReps('${ex.id}', ${sIdx}, this.value)" title="次數">
-                      <span>下</span>
-                      <button class="adj-btn" onclick="adjReps('${ex.id}', ${sIdx}, 1)">+</button>
-                    </div>
+                  <div class="set-reps-control">
+                    <button class="adj-btn" onclick="adjReps('${ex.id}', ${sIdx}, -1)">-</button>
+                    <input type="number" class="reps-input" value="${set.reps}" onchange="setReps('${ex.id}', ${sIdx}, this.value)" title="次數">
+                    <span class="unit-label">下</span>
+                    <button class="adj-btn" onclick="adjReps('${ex.id}', ${sIdx}, 1)">+</button>
                   </div>
                   <div class="set-action">
                     <button class="check-btn ${set.done ? 'done' : ''}" onclick="toggleSetDone('${ex.id}', ${sIdx}, ${restSec}, '${ex.name}')">
@@ -1552,7 +1516,7 @@
         <div class="floor-section floor-upstairs">
           <div class="floor-header">
             <span class="floor-title-badge badge-blue">🏠 2F 樓上區 · 彈力帶門錨 ＆ 墊上核心</span>
-            <span class="floor-hint">全部在樓上集中完成</span>
+            <span class="floor-hint">集中完成</span>
           </div>
           ${f1List.map((ex, idx) => renderCard(ex, idx, f1List.length)).join('')}
         </div>
@@ -1561,8 +1525,7 @@
       // 2. 轉場提醒卡片
       html += `
         <div class="floor-transition-card">
-          <span class="icon">👟</span>
-          <span>樓上動作完成！請移動至 1F 樓下繼續進行壺鈴與有氧</span>
+          <span>👟 樓上動作完成！移動至 1F 樓下繼續訓練</span>
         </div>
       `;
 
@@ -1572,17 +1535,17 @@
         <div class="floor-section floor-downstairs">
           <div class="floor-header">
             <span class="floor-title-badge badge-green">🏋️ 1F 樓下區 · 可調壺鈴 ＆ 健力腳踏車</span>
-            <span class="floor-hint">下肢重項、單側手臂與心肺</span>
+            <span class="floor-hint">壺鈴與心肺</span>
           </div>
           ${f2List.map((ex, idx) => renderCard(ex, idx, f2List.length)).join('')}
           
           <!-- Zone 2 Cardio Block -->
           <div class="zone2-card">
-            <h3 style="font-size: 1.05rem; margin-bottom: 4px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <h3 style="font-size: 0.96rem; margin-bottom: 2px;">
               🚴 健力腳踏車 Zone 2 (18分鐘)
             </h3>
-            <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 8px;">
-              體感準則：鼻吸鼻呼 1:1 · 微喘但可說完整句子 · 踏頻 80–90 RPM
+            <p style="font-size: 0.74rem; color: var(--text-muted); margin-bottom: 6px;">
+              體感準則：鼻吸鼻呼 1:1 · 微喘可說完整句子 · 80–90 RPM
             </p>
 
             <div class="breath-circle-wrap">
@@ -1591,11 +1554,11 @@
               </div>
             </div>
 
-            <div style="font-family: var(--font-mono); font-size: 2.2rem; font-weight: 700; margin-bottom: 12px;" id="zone2-timer">
+            <div style="font-family: var(--font-mono); font-size: 1.9rem; font-weight: 700; margin-bottom: 10px;" id="zone2-timer">
               18:00
             </div>
 
-            <div style="display: flex; justify-content: center; gap: 12px;">
+            <div style="display: flex; justify-content: center; gap: 8px;">
               <button class="btn btn-accent" id="btn-zone2-toggle" onclick="toggleZone2()">開始踩踏</button>
               <button class="btn btn-secondary" onclick="resetZone2()">重置</button>
             </div>
@@ -1621,7 +1584,7 @@
       
       let msg = `前次完成：${state.lastCompletedDay} (${diffDays === 0 ? '今天' : `${diffDays}天前`})`;
       if (diffDays >= 4) {
-        msg += " · ⚠️ 間隔逾 4 天，建議首組保留 2 下儲備次數 (RIR 2) 預防 DOMS。";
+        msg += " · ⚠️ 間隔逾 4 天，建議首組保留 2 下儲備次數 (RIR 2)。";
       } else {
         msg += " · 狀態機自動滾動推薦。";
       }
@@ -1664,43 +1627,6 @@
       renderAll();
     }
 
-    function adjWeight(exId, delta) {
-      if (!state.records[exId]) initExerciseRecord(exId);
-      const curVal = state.records[exId].weight;
-
-      // 若為純數字或含 kg
-      let cur = parseFloat(curVal);
-      if (!isNaN(cur)) {
-        const kbWeights = state.config.kbLevels || DEFAULT_CONFIG.kbLevels;
-        const curKg = cur;
-        let idx = kbWeights.findIndex(w => w >= curKg);
-        if (idx === -1) idx = kbWeights.length - 1;
-        let nextIdx = Math.max(0, Math.min(kbWeights.length - 1, idx + delta));
-        state.records[exId].weight = `${kbWeights[nextIdx]}kg`;
-      } else {
-        // 彈力帶調整環數
-        const bandLevels = state.config.bandLevels || DEFAULT_CONFIG.bandLevels;
-        let curBand = bandLevels[1];
-        let curRing = 3;
-        if (typeof curVal === "string" && curVal.includes("·")) {
-          const parts = curVal.split("·");
-          curBand = parts[0].trim();
-          const rMatch = parts[1].match(/\d+/);
-          if (rMatch) curRing = parseInt(rMatch[0]);
-        }
-        let nextRing = Math.max(1, Math.min(7, curRing + delta));
-        state.records[exId].weight = `${curBand} · 第${nextRing}環`;
-      }
-      saveState();
-      renderAll();
-    }
-
-    function setWeight(exId, val) {
-      if (!state.records[exId]) initExerciseRecord(exId);
-      state.records[exId].weight = val;
-      saveState();
-    }
-
     function adjReps(exId, setIdx, delta) {
       if (!state.records[exId]) initExerciseRecord(exId);
       const set = state.records[exId].sets[setIdx];
@@ -1724,7 +1650,7 @@
       }
       const defaultW = matchedEx ? matchedEx.defaultWeight : "12kg";
       const defaultR = matchedEx ? matchedEx.defaultReps : 10;
-      const defaultRest = matchedEx ? matchedEx.defaultRest : 60;
+      const defaultRest = matchedEx ? matchedEx.defaultRest : 45;
 
       state.records[exId] = {
         weight: defaultW,
@@ -1871,7 +1797,6 @@
     function resetAllDemoData() {
       if (confirm("警告：這將清空目前所有儲存的訓練記錄，確定要重置嗎？")) {
         localStorage.removeItem(STORAGE_KEY);
-        localStorage.removeItem("WORKOUT_HUD_STORE_V2");
         state = {
           activeDay: "A",
           lastCompletedDay: null,

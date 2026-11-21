@@ -19,6 +19,7 @@
       --amber-dim: rgba(245, 158, 11, 0.15);
       --blue: #3b82f6;
       --blue-dim: rgba(59, 130, 246, 0.15);
+      --blue-border: #1d4ed8;
       --red: #ef4444;
       --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
@@ -39,6 +40,7 @@
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
+      padding-bottom: 90px; /* Space for sticky footer & floating timer */
     }
 
     /* Top Bar */
@@ -47,7 +49,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(11, 14, 20, 0.9);
+      background: rgba(11, 14, 20, 0.95);
       backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--card-border);
       position: sticky;
@@ -108,7 +110,7 @@
       gap: 16px;
     }
 
-    /* Status Banner */
+    /* Status Card */
     .status-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -143,52 +145,476 @@
       flex-shrink: 0;
     }
 
-    /* Timer HUD */
-    .timer-hud {
-      background: #121722;
-      border: 2px solid var(--accent);
-      box-shadow: 0 0 20px var(--accent-glow);
-      border-radius: 16px;
-      padding: 16px;
-      text-align: center;
+    /* Double Progression Alert */
+    .progress-banner {
+      background: var(--accent-dim);
+      border: 1px dashed var(--accent);
+      color: #a7f3d0;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
       display: none;
-      animation: fadeIn 0.3s ease;
+      align-items: center;
+      gap: 8px;
+      line-height: 1.4;
     }
 
-    .timer-hud.active {
+    /* Floor Containers (空間分流視覺) */
+    .floor-section {
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 8px;
+      border: 1px solid transparent;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: all 0.2s ease;
+    }
+
+    .floor-upstairs {
+      background: linear-gradient(180deg, rgba(30, 58, 138, 0.2) 0%, rgba(15, 23, 42, 0.4) 100%);
+      border-color: rgba(59, 130, 246, 0.35);
+    }
+
+    .floor-downstairs {
+      background: linear-gradient(180deg, rgba(6, 78, 59, 0.2) 0%, rgba(6, 40, 32, 0.4) 100%);
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+
+    .floor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 4px;
+    }
+
+    .floor-title-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 4px 10px;
+      border-radius: 8px;
+    }
+
+    .badge-blue {
+      background: rgba(59, 130, 246, 0.2);
+      color: #93c5fd;
+      border: 1px solid rgba(59, 130, 246, 0.5);
+    }
+
+    .badge-green {
+      background: rgba(16, 185, 129, 0.2);
+      color: #6ee7b7;
+      border: 1px solid rgba(16, 185, 129, 0.5);
+    }
+
+    .floor-hint {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Floor Transition Card (轉場提醒) */
+    .floor-transition-card {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: #111827;
+      border: 1px dashed #374151;
+      border-radius: 12px;
+      color: #e5e7eb;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .floor-transition-card span.icon {
+      font-size: 1.2rem;
+    }
+
+    /* Exercise Card */
+    .exercise-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px;
+      transition: border-color 0.2s;
+    }
+
+    .exercise-card.active-target {
+      border-color: var(--accent);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
+    }
+
+    .ex-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .ex-title-wrap {
+      flex: 1;
+    }
+
+    .ex-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .ex-tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: #1e2638;
+      color: #94a3b8;
+      white-space: nowrap;
+    }
+
+    /* Card Order & Action Controls */
+    .card-order-controls {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .icon-btn {
+      background: #1f2737;
+      border: 1px solid #2d3748;
+      color: #94a3b8;
+      border-radius: 6px;
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .icon-btn:hover {
+      background: #2b364d;
+      color: #fff;
+    }
+
+    .icon-btn:active {
+      transform: scale(0.92);
+    }
+
+    /* External Focus Cues Badges */
+    .cue-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 6px;
+    }
+
+    .cue-badge {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: rgba(245, 158, 11, 0.12);
+      color: #fcd34d;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      white-space: nowrap;
+    }
+
+    .cue-badge.alert {
+      background: rgba(239, 68, 68, 0.12);
+      color: #fca5a5;
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-toggle-guide {
+      font-size: 0.72rem;
+      background: #1e2638;
+      border: 1px solid #334155;
+      color: #93c5fd;
+      padding: 2px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Guide Collapsible Drawer */
+    .guide-drawer {
+      display: none;
+      background: #0d121c;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-top: 8px;
+      font-size: 0.8rem;
+      line-height: 1.5;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .guide-drawer.open {
       display: block;
     }
 
-    .timer-label {
-      font-size: 0.85rem;
+    .guide-block {
+      margin-bottom: 6px;
+    }
+
+    .guide-block:last-child {
+      margin-bottom: 0;
+    }
+
+    .guide-label {
+      font-weight: 700;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 2px;
+    }
+
+    .guide-text {
+      color: #cbd5e1;
+      padding-left: 14px;
+    }
+
+    /* Equipment & Weight Selection Toolbar */
+    .equip-selector-bar {
+      background: #0d111a;
+      border: 1px solid #1f2737;
+      border-radius: 8px;
+      padding: 8px 10px;
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .selector-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .selector-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      min-width: 44px;
+      font-weight: 600;
+    }
+
+    .pill-opt {
+      font-size: 0.72rem;
+      font-weight: 600;
+      background: #182030;
+      border: 1px solid #28344c;
+      color: #94a3b8;
+      padding: 3px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .pill-opt.active {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+      color: #6ee7b7;
+      font-weight: 700;
+    }
+
+    .pill-opt:active {
+      transform: scale(0.95);
+    }
+
+    /* Rest Interval Selector */
+    .rest-selector-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px dashed #1c2436;
+      flex-wrap: wrap;
+    }
+
+    /* Sets Table */
+    .sets-table {
+      width: 100%;
+      margin-top: 10px;
+      border-collapse: collapse;
+    }
+
+    .set-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-top: 1px solid #1c2333;
+      gap: 8px;
+    }
+
+    .set-num {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      width: 44px;
+      flex-shrink: 0;
+    }
+
+    .set-inputs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .input-pill {
+      display: flex;
+      align-items: center;
+      background: #0d111a;
+      border: 1px solid #232b3e;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .input-pill input {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 16px; /* Lock 16px to prevent iOS auto-zoom */
+      font-weight: 700;
+      width: 58px;
+      text-align: center;
+      padding: 6px 0;
+    }
+
+    .input-pill span {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      padding-right: 6px;
+    }
+
+    .adj-btn {
+      background: #1c2333;
+      color: #cbd5e1;
+      border: none;
+      width: 40px;
+      height: 38px;
+      font-weight: 800;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+
+    .adj-btn:active {
+      background: var(--accent);
+      color: #000;
+    }
+
+    .set-action {
+      width: 76px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .check-btn {
+      background: #1c2333;
+      border: 1px solid #2b364d;
+      color: var(--text-muted);
+      border-radius: 8px;
+      height: 38px;
+      width: 100%;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .check-btn.done {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #042f2e;
+    }
+
+    /* Bottom Floating Timer HUD (底部常駐懸浮膠囊) */
+    .timer-floating-hud {
+      position: fixed;
+      bottom: 74px;
+      left: 16px;
+      right: 16px;
+      max-width: 648px;
+      margin: 0 auto;
+      background: rgba(18, 23, 34, 0.95);
+      border: 2px solid var(--accent);
+      box-shadow: 0 0 24px var(--accent-glow), 0 8px 32px rgba(0,0,0,0.6);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 12px 16px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      z-index: 80;
+      animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .timer-floating-hud.active {
+      display: flex;
+    }
+
+    .timer-info-block {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .timer-title {
+      font-size: 0.75rem;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--accent);
-      margin-bottom: 4px;
+      letter-spacing: 0.5px;
+      color: #a7f3d0;
+      font-weight: 600;
     }
 
     .timer-clock {
       font-family: var(--font-mono);
-      font-size: 3.5rem;
+      font-size: 2.2rem;
       font-weight: 800;
       line-height: 1;
       color: #fff;
-      margin: 8px 0;
     }
 
     .timer-controls {
       display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 10px;
+      align-items: center;
+      gap: 6px;
     }
 
     .btn {
       border: none;
       border-radius: 8px;
-      padding: 10px 18px;
+      padding: 8px 14px;
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -197,7 +623,7 @@
     }
 
     .btn:active {
-      transform: scale(0.97);
+      transform: scale(0.96);
     }
 
     .btn-accent {
@@ -215,194 +641,21 @@
       color: #451a03;
     }
 
-    /* Sections */
-    .section-title {
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--text-muted);
-      margin: 8px 0 4px 4px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    /* Exercise Item Card */
-    .exercise-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 12px;
-      transition: border-color 0.2s;
-    }
-
-    .ex-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 10px;
-      gap: 10px;
-    }
-
-    .ex-title {
-      font-size: 1.05rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .ex-tag {
-      font-size: 0.7rem;
-      font-weight: 600;
-      padding: 2px 6px;
-      border-radius: 4px;
-      background: #1e2638;
-      color: #94a3b8;
-      white-space: nowrap;
-    }
-
-    .ex-meta {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-top: 3px;
-      line-height: 1.4;
-    }
-
-    .ex-history-chip {
-      font-size: 0.75rem;
-      color: var(--amber);
-      background: var(--amber-dim);
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-family: var(--font-mono);
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    /* Set Rows */
-    .sets-table {
-      width: 100%;
-      margin-top: 10px;
-      border-collapse: collapse;
-    }
-
-    .set-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 0;
-      border-top: 1px solid #1c2333;
-      gap: 8px;
-    }
-
-    .set-num {
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      width: 44px;
-      flex-shrink: 0;
-    }
-
-    .set-inputs {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex: 1;
-      justify-content: center;
-    }
-
-    .input-pill {
-      display: flex;
-      align-items: center;
-      background: #0d111a;
-      border: 1px solid #232b3e;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    /* 16px font-size to prevent iOS Safari auto-zoom */
-    .input-pill input {
-      background: transparent;
-      border: none;
-      color: #fff;
-      font-family: var(--font-mono);
-      font-size: 16px;
-      font-weight: 700;
-      width: 58px;
-      text-align: center;
-      padding: 6px 0;
-    }
-
-    .input-pill span {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      padding-right: 6px;
-    }
-
-    /* 44px Touch Target */
-    .adj-btn {
-      background: #1c2333;
-      color: #cbd5e1;
-      border: none;
-      width: 44px;
-      height: 40px;
-      font-weight: 800;
-      font-size: 1.2rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.15s;
-    }
-
-    .adj-btn:active {
-      background: var(--accent);
-      color: #000;
-    }
-
-    .set-action {
-      width: 80px;
-      text-align: right;
-      flex-shrink: 0;
-    }
-
-    .check-btn {
-      background: #1c2333;
-      border: 1px solid #2b364d;
-      color: var(--text-muted);
-      border-radius: 8px;
-      height: 40px;
-      width: 100%;
-      font-size: 0.85rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .check-btn.done {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: #042f2e;
-    }
-
     /* Zone 2 Card */
     .zone2-card {
       background: linear-gradient(145deg, #121824, #0d121c);
       border: 1px solid #223049;
       border-radius: 16px;
-      padding: 20px;
+      padding: 18px;
       text-align: center;
       position: relative;
       overflow: hidden;
     }
 
     .breath-circle-wrap {
-      width: 140px;
-      height: 140px;
-      margin: 16px auto;
+      width: 120px;
+      height: 120px;
+      margin: 12px auto;
       position: relative;
       display: flex;
       align-items: center;
@@ -410,68 +663,65 @@
     }
 
     .breath-circle {
-      width: 100px;
-      height: 100px;
+      width: 86px;
+      height: 86px;
       border-radius: 50%;
       background: var(--accent-dim);
       border: 2px solid var(--accent);
-      box-shadow: 0 0 20px var(--accent-glow);
+      box-shadow: 0 0 16px var(--accent-glow);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: var(--accent);
       transition: transform 4s ease-in-out;
     }
 
     .breath-circle.inhale {
-      transform: scale(1.35);
+      transform: scale(1.3);
       background: rgba(16, 185, 129, 0.3);
     }
 
     .breath-circle.exhale {
-      transform: scale(0.9);
+      transform: scale(0.88);
       background: var(--accent-dim);
     }
 
-    .progress-banner {
-      background: var(--accent-dim);
-      border: 1px dashed var(--accent);
-      color: #a7f3d0;
-      padding: 12px 14px;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      display: none;
-      align-items: center;
-      gap: 8px;
-      line-height: 1.4;
-    }
-
-    /* Footer Navigation with Safe Area Inset */
+    /* Sticky Footer */
     footer {
-      padding: 14px 16px;
-      padding-bottom: max(14px, env(safe-area-inset-bottom));
-      background: var(--card-bg);
+      padding: 12px 16px;
+      padding-bottom: max(12px, env(safe-area-inset-bottom));
+      background: rgba(20, 24, 34, 0.95);
+      backdrop-filter: blur(8px);
       border-top: 1px solid var(--card-border);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: sticky;
+      position: fixed;
       bottom: 0;
-      z-index: 40;
+      left: 0;
+      right: 0;
+      z-index: 70;
+      max-width: 680px;
+      margin: 0 auto;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-8px); }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(16px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Modal for Backup / Restore */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Modal for Backup / Settings */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0,0,0,0.75);
       backdrop-filter: blur(4px);
       display: none;
       align-items: center;
@@ -479,9 +729,11 @@
       z-index: 100;
       padding: 16px;
     }
+
     .modal-overlay.open {
       display: flex;
     }
+
     .modal-box {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -489,6 +741,32 @@
       max-width: 440px;
       width: 100%;
       padding: 20px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .setting-group {
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #1e2638;
+    }
+
+    .setting-group h4 {
+      font-size: 0.85rem;
+      color: #93c5fd;
+      margin-bottom: 6px;
+    }
+
+    .setting-input {
+      width: 100%;
+      background: #0d111a;
+      border: 1px solid #2b364d;
+      color: #fff;
+      padding: 8px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      margin-top: 4px;
+      font-family: var(--font-mono);
     }
   </style>
 </head>
@@ -502,23 +780,12 @@
     <div class="top-actions">
       <button class="pill-btn" id="btn-switch-a" onclick="switchWorkout('A')">Day A (推/膝/抗伸)</button>
       <button class="pill-btn" id="btn-switch-b" onclick="switchWorkout('B')">Day B (拉/髖/抗旋)</button>
-      <button class="pill-btn" onclick="openBackupModal()" title="資料備份與設定">⚙️</button>
+      <button class="pill-btn" onclick="openBackupModal()" title="器材規格與資料備份">⚙️</button>
     </div>
   </header>
 
-  <!-- Main HUD View -->
+  <!-- Main View -->
   <main>
-
-    <!-- Rest Timer Overlay -->
-    <div class="timer-hud" id="timer-hud">
-      <div class="timer-label" id="timer-label">組間休息倒數</div>
-      <div class="timer-clock" id="timer-clock">00:45</div>
-      <div class="timer-controls">
-        <button class="btn btn-secondary" onclick="adjustTimer(-15)">-15s</button>
-        <button class="btn btn-secondary" onclick="adjustTimer(+15)">+15s</button>
-        <button class="btn btn-amber" onclick="skipTimer()">跳過休息 ➔</button>
-      </div>
-    </div>
 
     <!-- Status & Smart Advisory -->
     <div class="status-card">
@@ -534,59 +801,57 @@
       🔥 <span id="progress-banner-text">目標達成！已解鎖下一次升重門檻。</span>
     </div>
 
-    <!-- Dynamic Workout Sections -->
+    <!-- Dynamic Workout Content (樓層分流由 JS 渲染) -->
     <div id="workout-content">
       <!-- Injected by JavaScript -->
     </div>
 
-    <!-- Zone 2 Cardio Block -->
-    <div class="section-title">
-      <span>階段三：健力腳踏車有氧</span>
-      <span style="color: var(--accent);">Zone 2 代謝恢復</span>
-    </div>
-    <div class="zone2-card">
-      <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Zone 2 心肺踩踏 (18分鐘)</h3>
-      <p style="font-size: 0.8rem; color: var(--text-muted);">
-        體感準則：鼻吸鼻呼 1:1 · 微喘但可說完整句子 · 踏頻 80–90 RPM
-      </p>
-
-      <div class="breath-circle-wrap">
-        <div class="breath-circle" id="breath-circle">
-          <span id="breath-text">準備吸氣</span>
-        </div>
-      </div>
-
-      <div style="font-family: var(--font-mono); font-size: 2.2rem; font-weight: 700; margin-bottom: 12px;" id="zone2-timer">
-        18:00
-      </div>
-
-      <div style="display: flex; justify-content: center; gap: 12px;">
-        <button class="btn btn-accent" id="btn-zone2-toggle" onclick="toggleZone2()">開始踩踏</button>
-        <button class="btn btn-secondary" onclick="resetZone2()">重置</button>
-      </div>
-    </div>
-
   </main>
+
+  <!-- Floating Rest Timer HUD (底部常駐懸浮膠囊) -->
+  <div class="timer-floating-hud" id="timer-hud">
+    <div class="timer-info-block">
+      <div class="timer-title" id="timer-label">組間休息倒數</div>
+      <div class="timer-clock" id="timer-clock">00:45</div>
+    </div>
+    <div class="timer-controls">
+      <button class="btn btn-secondary" onclick="adjustTimer(-15)">-15s</button>
+      <button class="btn btn-secondary" onclick="adjustTimer(+15)">+15s</button>
+      <button class="btn btn-amber" onclick="skipTimer()">跳過 ➔</button>
+    </div>
+  </div>
 
   <!-- Sticky Bottom Finish Bar -->
   <footer>
     <div>
-      <div style="font-size: 0.75rem; color: var(--text-muted);">本輪進度</div>
+      <div style="font-size: 0.72rem; color: var(--text-muted);">本輪進度</div>
       <div style="font-size: 0.95rem; font-weight: 700;" id="completion-counter">0 / 12 組完成</div>
     </div>
-    <button class="btn btn-accent" style="padding: 12px 24px; font-size: 1rem;" onclick="finishWorkoutSession()">
+    <button class="btn btn-accent" style="padding: 10px 20px; font-size: 0.95rem;" onclick="finishWorkoutSession()">
       完結今日課表 🏆
     </button>
   </footer>
 
-  <!-- Modal: Data Backup & Restore -->
+  <!-- Modal: Settings & Data Backup -->
   <div class="modal-overlay" id="backup-modal" onclick="closeBackupModal(event)">
     <div class="modal-box" onclick="event.stopPropagation()">
-      <h3 style="margin-bottom: 8px;">⚙️ 數據管理 (Local-First)</h3>
-      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px;">
-        所有訓練紀錄長存在本地瀏覽器。可在此匯出備份 JSON，或在更換裝置時匯入。
-      </p>
-      <div style="display: flex; flex-direction: column; gap: 10px;">
+      <h3 style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+        ⚙️ 器材規格與數據管理
+      </h3>
+
+      <div class="setting-group">
+        <h4>🏋️ 可調壺鈴 4 段重量 (kg)</h4>
+        <p style="font-size: 0.75rem; color: var(--text-muted);">請用逗號分隔 4 個段位數值</p>
+        <input type="text" class="setting-input" id="cfg-kb-weights" value="12, 16, 20, 24" onchange="saveCustomConfig()">
+      </div>
+
+      <div class="setting-group">
+        <h4>🎗️ 彈力帶 4 強度標籤</h4>
+        <p style="font-size: 0.75rem; color: var(--text-muted);">請用逗號分隔 4 個強度色號或名稱</p>
+        <input type="text" class="setting-input" id="cfg-band-levels" value="極輕, 輕阻力, 中阻力, 重阻力" onchange="saveCustomConfig()">
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 14px;">
         <button class="btn btn-secondary" onclick="exportDataJson()">📥 匯出紀錄備份 (JSON)</button>
         <label class="btn btn-secondary" style="cursor: pointer; text-align: center;">
           📤 匯入備份檔案
@@ -600,143 +865,222 @@
 
   <script>
     // ==========================================
-    // 1. DATA SCHEMA & WORKOUT TEMPLATES
+    // 1. DATA SCHEMA & EXERCISE TEMPLATES
     // ==========================================
-    const BAND_LEVELS = ["極輕", "輕阻力", "中阻力", "重阻力", "超重"];
+    const DEFAULT_CONFIG = {
+      kbLevels: [12, 16, 20, 24],
+      bandLevels: ["極輕", "輕阻力", "中阻力", "重阻力"],
+      bandRings: [1, 2, 3, 4, 5, 6, 7],
+      restOptions: [30, 45, 60, 90, 120]
+    };
 
     const TEMPLATES = {
       A: {
-        title: "Day A — 胸 ＋ 膝主導 ＋ 側肩三頭 ＋ 核心抗伸展",
-        block1Title: "區塊一：主肌肥大超組 (下肢 ↔ 上肢交替 · 3組)",
-        block1: [
-          {
-            id: "a_split_squat",
-            name: "原地負重分腿蹲",
-            tag: "膝主導 / 離心拉伸髂腰肌",
-            tool: "可調壺鈴 (軀幹前傾15度，拉開後髖)",
-            targetReps: "8–12下",
-            defaultWeight: 14,
-            defaultReps: 10,
-            restAfter: 45
-          },
-          {
-            id: "a_pushup",
-            name: "彈力繩繞背伏地挺身",
-            tag: "胸推 / 前鋸肌肩胛前引",
-            tool: "彈力繩繞背 (推頂峰胸口推離地面)",
-            targetReps: "8–12下",
-            defaultWeight: "中阻力",
-            defaultReps: 10,
-            restAfter: 75
-          }
-        ],
-        block2Title: "區塊二：側肩三頭與核心抗伸展 (3合組 · 3組)",
-        block2: [
-          {
-            id: "a_lateral_raise",
-            name: "彈力繩站姿側平舉",
-            tag: "三角肌中束",
-            tool: "雙腳踩繩 / 肘微彎導向斜前",
-            targetReps: "12–15下",
-            defaultWeight: "輕阻力",
-            defaultReps: 12,
-            restAfter: 15
-          },
-          {
-            id: "a_tricep_ext",
-            name: "門錨/踩繩三頭過頂伸展",
-            tag: "肱三頭肌長頭",
-            tool: "彈力繩 (頂峰完全鎖定伸展)",
-            targetReps: "12–15下",
-            defaultWeight: "中阻力",
-            defaultReps: 12,
-            restAfter: 15
-          },
-          {
-            id: "a_deadbug",
-            name: "核心死蟲式 / 門錨彈力繩前推",
-            tag: "核心抗伸展 (保護腰椎)",
-            tool: "徒手或門錨胸高 (腰椎緊貼地面)",
-            targetReps: "每側10–12下",
-            defaultWeight: "徒手/輕繩",
-            defaultReps: 10,
-            restAfter: 60
-          }
-        ]
+        title: "Day A — 推 ＋ 膝主導 ＋ 側肩三頭 ＋ 核心抗伸展",
+        floor1: {
+          title: "2F 樓上區 · 彈力帶門錨 ＆ 墊上核心",
+          hint: "彈力帶伏地挺身 / 側平舉 / 核心抗伸展",
+          exercises: [
+            {
+              id: "a_pushup",
+              name: "彈力繩繞背伏地挺身",
+              tag: "胸推 / 前鋸肌肩胛前引",
+              toolType: "band",
+              defaultWeight: "中阻力 · 第3環",
+              targetReps: "8–12下",
+              defaultReps: 10,
+              defaultRest: 60,
+              cues: ["🎯 掌心推穿地板", "🎯 頂峰胸腔推離地板迎天花板", "⚠️ 骨盆不可下墜塌腰"],
+              guide: {
+                focus: "想像掌心如千斤頂把地板推開；推至頂峰時，將肩胛骨完全前引，胸口遠離地面衝向天花板，啟動前鋸肌。",
+                breath: "下沉吸氣（2秒），推起用力時由嘴吐氣發力（1秒）。",
+                safety: "頭部、脊椎與骨盆維持鋼筋般一線，嚴禁腰部塌陷或下墜代償。"
+              }
+            },
+            {
+              id: "a_lateral_raise",
+              name: "彈力繩站姿側平舉",
+              tag: "三角肌中束 / 肩胛骨平面",
+              toolType: "band",
+              defaultWeight: "輕阻力 · 第2環",
+              targetReps: "12–15下",
+              defaultReps: 12,
+              defaultRest: 45,
+              cues: ["🎯 手肘往兩側牆壁推", "🎯 微朝斜前 30 度角", "⚠️ 手肘不超過肩膀高度"],
+              guide: {
+                focus: "注意力放在手肘：想像把兩手手肘推向左右兩側的牆面，而非主動提腕；在肩胛骨平面（斜前 30°）滑行。",
+                breath: "向外推起時吐氣，緩慢回落時吸氣延展。",
+                safety: "沉肩放鬆斜方肌，手肘高度不超越肩膀水平線，嚴禁後仰甩動軀幹。"
+              }
+            },
+            {
+              id: "a_deadbug",
+              name: "核心死蟲式 / 門錨彈力繩前推",
+              tag: "核心抗伸展 / 保護腰椎",
+              toolType: "bodyweight",
+              defaultWeight: "徒手/輕繩",
+              targetReps: "每側10–12下",
+              defaultReps: 10,
+              defaultRest: 45,
+              cues: ["🎯 下背死壓地面零縫隙", "🎯 對側腳蹬向遠方牆壁", "⚠️ 下背絕不可浮起空隙"],
+              guide: {
+                focus: "想像地板與下背之間夾著一張紙，任何時刻都無法抽走；對側腳跟如蹬車般朝遠方牆壁踢出，腹壁 360 度充氣抵抗伸展。",
+                breath: "蹬腿向外時拉長吐氣，收回時鼻吸氣重整腹內壓。",
+                safety: "一旦發現腰椎向上弓起懸空，立即縮小蹬腿角度或停下，絕不以腰部承受剪力。"
+              }
+            }
+          ]
+        },
+        floor2: {
+          title: "1F 樓下區 · 可調壺鈴 ＆ 健力腳踏車",
+          hint: "分腿蹲 / 單臂頭顱破壞者 / Zone 2",
+          exercises: [
+            {
+              id: "a_split_squat",
+              name: "原地負重分腿蹲",
+              tag: "膝主導 / 離心拉伸髂腰肌",
+              toolType: "kettlebell",
+              defaultWeight: 16,
+              targetReps: "每側8–12下",
+              defaultReps: 10,
+              defaultRest: 75,
+              cues: ["🎯 前腳掌三點踩穿地板", "🎯 軀幹前傾15度如滑雪", "🎯 後膝垂直軟著陸"],
+              guide: {
+                focus: "前腳掌大拇指球、小拇指球與腳跟三點釘死地面；軀幹前傾 15°，引導臀大肌吃重；後腿膝蓋垂直向下沉降軟著陸，感受後髖前側（髂腰肌）受控拉伸。",
+                breath: "下沉吸氣蓄壓，蹬起推離地面時吐氣發力。",
+                safety: "前膝保持與第二腳趾方向一致，嚴禁內扣扭曲髕骨。"
+              }
+            },
+            {
+              id: "a_skull_crusher",
+              name: "壺鈴單臂仰臥頭顱破壞者",
+              tag: "肱三頭肌長頭 / 單臂抗扭",
+              toolType: "kettlebell",
+              defaultWeight: 12,
+              targetReps: "每側8–12下",
+              defaultReps: 10,
+              defaultRest: 60,
+              cues: ["🎯 上臂如柱釘死天花板微後傾", "🎯 壺鈴沉向耳側地面", "⚠️ 手肘不可向外爆開"],
+              guide: {
+                focus: "仰臥於地，單手握把手，大臂垂直地面並微向頭頂後傾 10° 保持張力；手肘為唯一固定軸心，壺鈴下放至耳邊地板，再筆直推回鎖定。",
+                breath: "下放時慢吸氣 2 秒，向上伸展推起時吐氣。",
+                safety: "非發力手可輕扶手肘輔助穩定；收緊核心，腰部嚴禁拱起代償。"
+              }
+            }
+          ]
+        }
       },
       B: {
         title: "Day B — 背 ＋ 髖主導 ＋ 圓肩後肩 ＋ 二頭 ＋ 核心抗旋",
-        block1Title: "區塊一：主肌肥大超組 (後側鏈 ↔ 闊背交替 · 3組)",
-        block1: [
-          {
-            id: "b_rdl",
-            name: "壺鈴羅馬尼亞硬舉 (RDL)",
-            tag: "髖主導 / 後側鉸鏈",
-            tool: "可調壺鈴 (屁股後推折髖，嚴禁盲目碰地)",
-            targetReps: "8–12下",
-            defaultWeight: 20,
-            defaultReps: 10,
-            restAfter: 45
-          },
-          {
-            id: "b_single_row",
-            name: "可調壺鈴單臂划船",
-            tag: "闊背肌 / 上背厚度",
-            tool: "可調壺鈴 (一手撐椅，手肘往髖骨方向後拉)",
-            targetReps: "每側8–12下",
-            defaultWeight: 16,
-            defaultReps: 10,
-            restAfter: 75
-          }
-        ],
-        block2Title: "區塊二：圓肩修正、二頭與核心抗旋 (3合組 · 3組)",
-        block2: [
-          {
-            id: "b_face_pull",
-            name: "門錨高位面拉 (Face Pull)",
-            tag: "逆轉圓肩 / 外旋後三角",
-            tool: "彈力繩門錨 (額頭高度+雙手向外展旋)",
-            targetReps: "12–15下",
-            defaultWeight: "中阻力",
-            defaultReps: 12,
-            restAfter: 15
-          },
-          {
-            id: "b_bicep_curl",
-            name: "彈力繩/壺鈴二頭彎舉",
-            tag: "肱二頭肌",
-            tool: "雙腳踩繩或單手壺鈴 (掌心向上擠壓)",
-            targetReps: "12–15下",
-            defaultWeight: "中阻力",
-            defaultReps: 12,
-            restAfter: 15
-          },
-          {
-            id: "b_pallof_press",
-            name: "門錨 Pallof Press (抗旋轉推)",
-            tag: "核心抗旋轉剛性",
-            tool: "彈力繩門錨 (平推伸直停頓2秒)",
-            targetReps: "每側10–12下",
-            defaultWeight: "中阻力",
-            defaultReps: 10,
-            restAfter: 60
-          }
-        ]
+        floor1: {
+          title: "2F 樓上區 · 彈力帶門錨 ＆ 墊上核心",
+          hint: "高位面拉 / 門錨 Pallof Press 抗旋轉",
+          exercises: [
+            {
+              id: "b_face_pull",
+              name: "門錨高位面拉 (Face Pull)",
+              tag: "逆轉圓肩 / 外旋後三角與菱形肌",
+              toolType: "band",
+              defaultWeight: "中阻力 · 第3環",
+              targetReps: "12–15下",
+              defaultReps: 12,
+              defaultRest: 45,
+              cues: ["🎯 拳頭拉向耳側手背後轉", "🎯 肩胛中間夾住網球", "⚠️ 頭頸不前伸探頭"],
+              guide: {
+                focus: "門錨固定於額頭高度；雙手抓繩後拉至面部兩側，手背向後旋轉（雙二頭肌展示姿態）；想像兩側肩胛骨中間死死夾住一顆網球。",
+                breath: "向後外旋拉開時吐氣並停頓 1 秒，緩慢回放時吸氣。",
+                safety: "挺胸沉肩，嚴禁用頸部前伸或腰椎後仰借力代償。"
+              }
+            },
+            {
+              id: "b_pallof_press",
+              name: "門錨 Pallof Press (抗旋轉推)",
+              tag: "核心抗旋轉剛性 / 骨盆鎖定",
+              toolType: "band",
+              defaultWeight: "中阻力 · 第4環",
+              targetReps: "每側10–12下",
+              defaultReps: 10,
+              defaultRest: 45,
+              cues: ["🎯 沿滑軌水平推穿前方牆壁", "🎯 頂峰停頓 2 秒抗側扭", "⚠️ 骨盆肩膀鎖死正前方"],
+              guide: {
+                focus: "雙腳抓地如樹根，胸口與骨盆鎖定靶心；將雙手由胸前沿水平軌道筆直推向前方牆面，在手臂伸直頂峰停頓 2 秒，抵抗側向拉扯扭矩。",
+                breath: "向前推直時吐氣閉鎖氣筒，收回胸前時吸氣重整。",
+                safety: "骨盆與肩膀絕對不跟隨繩索轉動，保持純粹抗扭力剛性。"
+              }
+            }
+          ]
+        },
+        floor2: {
+          title: "1F 樓下區 · 可調壺鈴 ＆ 健力腳踏車",
+          hint: "壺鈴 RDL / 單臂划船 / 單臂彎舉 / Zone 2",
+          exercises: [
+            {
+              id: "b_rdl",
+              name: "壺鈴羅馬尼亞硬舉 (RDL)",
+              tag: "髖主導 / 後側鉸鏈與臀大肌",
+              toolType: "kettlebell",
+              defaultWeight: 20,
+              targetReps: "8–12下",
+              defaultReps: 10,
+              defaultRest: 75,
+              cues: ["🎯 屁股撞關身後30公分的門", "🎯 雙腳把地板撕開", "⚠️ 膝蓋不前蹲·腰不找地"],
+              guide: {
+                focus: "雙手握把手，想像身後 30 公分有一扇門，用屁股往後撞關它；壺鈴貼緊小腿脛骨垂降，雙腳向外撕開地板感受臀部與膕繩肌緊繃張力。",
+                breath: "折髖後推時深吸腹壓，用臀部撞回直立時由嘴呼氣。",
+                safety: "膝蓋微彎保持鎖定角度，嚴禁彎曲腰椎向下盲目摸地板。"
+              }
+            },
+            {
+              id: "b_single_row",
+              name: "可調壺鈴單臂划船",
+              tag: "闊背肌 / 上背厚度與抗旋",
+              toolType: "kettlebell",
+              defaultWeight: 16,
+              targetReps: "每側8–12下",
+              defaultReps: 10,
+              defaultRest: 60,
+              cues: ["🎯 支撐手推緊成平坦桌面", "🎯 手肘如發動割草機拉向口袋", "⚠️ 軀幹不翻轉甩動"],
+              guide: {
+                focus: "支撐手推實椅子或膝蓋，脊柱延伸成桌面；手肘像拉割草機發動繩一樣，朝同側骨盆後口袋弧線拉回，頂峰夾緊闊背肌。",
+                breath: "手肘向後拉時吐氣發力，向下延展下放時慢吸氣。",
+                safety: "雙肩保持水平對齊地面，嚴禁藉由轉動軀幹胸膛來甩動重量。"
+              }
+            },
+            {
+              id: "b_bicep_curl",
+              name: "壺鈴單臂二頭彎舉",
+              tag: "肱二頭肌 / 單側核心抗側屈",
+              toolType: "kettlebell",
+              defaultWeight: 12,
+              targetReps: "每側8–12下",
+              defaultReps: 10,
+              defaultRest: 45,
+              cues: ["🎯 手肘膠水黏在肋骨側邊", "🎯 拳頭劃弧朝肩膀前側提", "⚠️ 慢放2-3秒·骨盆不甩動"],
+              guide: {
+                focus: "站姿單手握把手，對側核心收緊抗側傾；肘關節固定於側腹，手腕中立，將壺鈴沿圓弧拉至胸前鎖骨高度，頂峰稍作擠壓。",
+                breath: "彎舉向上時吐氣，緩慢離心下沉時吸氣 2-3 秒。",
+                safety: "身體軀幹絕對筆直穩定，嚴禁前後擺動或聳肩借力。"
+              }
+            }
+          ]
+        }
       }
     };
 
-    const STORAGE_KEY = "WORKOUT_HUD_STORE_V2";
+    const STORAGE_KEY = "WORKOUT_HUD_STORE_V3";
 
     let state = {
       activeDay: null,
       lastCompletedDay: null,
       lastCompletedTime: null,
       history: [],
-      records: {}
+      records: {},
+      customOrder: { A: [], B: [] },
+      config: JSON.parse(JSON.stringify(DEFAULT_CONFIG))
     };
 
     // ==========================================
-    // 2. WAKE LOCK API (防止手機螢幕休眠導致計時漂移)
+    // 2. WAKE LOCK API (防休眠防漂移)
     // ==========================================
     let wakeLock = null;
     async function requestWakeLock() {
@@ -766,7 +1110,6 @@
       return audioCtx;
     }
 
-    // 首次使用者手勢解鎖音訊上下文
     function unlockAudioOnFirstInteraction() {
       const ctx = getAudioContext();
       if (ctx.state === 'suspended') {
@@ -800,25 +1143,22 @@
     }
 
     // ==========================================
-    // 4. PERSISTENCE & ROLLING STATE MACHINE
+    // 4. PERSISTENCE & MIGRATION
     // ==========================================
     function loadState() {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("WORKOUT_HUD_STORE_V2");
       if (raw) {
         try {
           const parsed = JSON.parse(raw);
           state = { ...state, ...parsed };
+          if (!state.config) state.config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+          if (!state.customOrder) state.customOrder = { A: [], B: [] };
         } catch (e) {
           console.error("Failed to parse storage", e);
         }
       }
-      // 僅在尚未顯式選擇當日課表時，由上次完成狀態自動推導滾動隊列
       if (!state.activeDay) {
-        if (state.lastCompletedDay === "A") {
-          state.activeDay = "B";
-        } else {
-          state.activeDay = "A";
-        }
+        state.activeDay = (state.lastCompletedDay === "A") ? "B" : "A";
       }
     }
 
@@ -827,18 +1167,20 @@
     }
 
     // ==========================================
-    // 5. REST TIMER (Timestamp Delta 防背景漂移)
+    // 5. REST TIMER (底部常駐懸浮膠囊)
     // ==========================================
     let timerInterval = null;
     let timerEndTime = null;
     let timerRemaining = 0;
 
-    function startRestTimer(seconds) {
+    function startRestTimer(seconds, exName = "") {
       clearInterval(timerInterval);
       requestWakeLock();
       
       const hud = document.getElementById("timer-hud");
       hud.classList.add("active");
+      document.getElementById("timer-label").textContent = exName ? `組間休息 · ${exName}` : "組間休息倒數";
+      
       timerEndTime = Date.now() + seconds * 1000;
       timerRemaining = seconds;
       updateTimerDisplay();
@@ -952,18 +1294,24 @@
       releaseWakeLock();
       isZone2Running = false;
       zone2Remaining = 18 * 60;
-      document.getElementById("btn-zone2-toggle").textContent = "開始踩踏";
-      document.getElementById("btn-zone2-toggle").className = "btn btn-accent";
-      document.getElementById("breath-circle").className = "breath-circle";
-      document.getElementById("breath-text").textContent = "準備吸氣";
+      const btn = document.getElementById("btn-zone2-toggle");
+      if (btn) {
+        btn.textContent = "開始踩踏";
+        btn.className = "btn btn-accent";
+      }
+      const circle = document.getElementById("breath-circle");
+      if (circle) circle.className = "breath-circle";
+      const text = document.getElementById("breath-text");
+      if (text) text.textContent = "準備吸氣";
       renderZone2Display();
     }
 
     function renderZone2Display() {
+      const el = document.getElementById("zone2-timer");
+      if (!el) return;
       const min = Math.floor(zone2Remaining / 60);
       const sec = zone2Remaining % 60;
-      document.getElementById("zone2-timer").textContent = 
-        `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+      el.textContent = `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
     }
 
     // ==========================================
@@ -973,6 +1321,66 @@
       state.activeDay = day;
       saveState();
       renderAll();
+    }
+
+    // 取得當前日期的動作清單（含排序處理）
+    function getExercisesForFloor(day, floorKey) {
+      const defaultList = TEMPLATES[day][floorKey].exercises;
+      const orderList = state.customOrder[day] || [];
+      if (orderList.length === 0) return [...defaultList];
+
+      // 依 customOrder 排序，未列出的依原本順序放後方
+      const sorted = [];
+      orderList.forEach(id => {
+        const found = defaultList.find(e => e.id === id);
+        if (found) sorted.push(found);
+      });
+      defaultList.forEach(e => {
+        if (!sorted.includes(e)) sorted.push(e);
+      });
+      return sorted;
+    }
+
+    function moveExercise(exId, direction) {
+      const day = state.activeDay;
+      const floorKey = findExerciseFloor(day, exId);
+      if (!floorKey) return;
+
+      const currentList = getExercisesForFloor(day, floorKey);
+      const idx = currentList.findIndex(e => e.id === exId);
+      if (idx === -1) return;
+
+      const newIdx = idx + direction;
+      if (newIdx < 0 || newIdx >= currentList.length) return;
+
+      // Swap in array
+      const temp = currentList[idx];
+      currentList[idx] = currentList[newIdx];
+      currentList[newIdx] = temp;
+
+      // Update state.customOrder for this day
+      const otherFloorKey = (floorKey === "floor1") ? "floor2" : "floor1";
+      const otherList = getExercisesForFloor(day, otherFloorKey);
+      
+      if (floorKey === "floor1") {
+        state.customOrder[day] = [...currentList.map(e => e.id), ...otherList.map(e => e.id)];
+      } else {
+        state.customOrder[day] = [...otherList.map(e => e.id), ...currentList.map(e => e.id)];
+      }
+
+      saveState();
+      renderAll();
+    }
+
+    function findExerciseFloor(day, exId) {
+      if (TEMPLATES[day].floor1.exercises.some(e => e.id === exId)) return "floor1";
+      if (TEMPLATES[day].floor2.exercises.some(e => e.id === exId)) return "floor2";
+      return null;
+    }
+
+    function toggleGuideDrawer(exId) {
+      const el = document.getElementById(`guide-${exId}`);
+      if (el) el.classList.toggle("open");
     }
 
     function renderAll() {
@@ -987,65 +1395,219 @@
       const container = document.getElementById("workout-content");
       let html = "";
 
-      const renderGroup = (title, items) => {
-        let blockHtml = `<div class="section-title"><span>${title}</span></div>`;
-        items.forEach(ex => {
-          if (!state.records[ex.id]) {
-            initExerciseRecord(ex.id);
-          }
-          const rec = state.records[ex.id];
+      // 渲染單個動作卡片
+      const renderCard = (ex, fIdx, fTotal) => {
+        if (!state.records[ex.id]) {
+          initExerciseRecord(ex.id);
+        }
+        const rec = state.records[ex.id];
+        const restSec = rec.restAfter || ex.defaultRest || 60;
 
-          blockHtml += `
-            <div class="exercise-card" id="card-${ex.id}">
-              <div class="ex-header">
-                <div>
-                  <div class="ex-title">${ex.name} <span class="ex-tag">${ex.tag}</span></div>
-                  <div class="ex-meta">器材：${ex.tool} · 目標：${ex.targetReps}</div>
-                </div>
-                <div class="ex-history-chip">
-                  上次: ${rec.lastSummary || `${rec.weight} | 10下`}
-                </div>
+        let cueHtml = "";
+        if (ex.cues) {
+          cueHtml = ex.cues.map(c => `<span class="cue-badge ${c.startsWith('⚠️') ? 'alert' : ''}">${c}</span>`).join('');
+        }
+
+        let selectorHtml = "";
+        if (ex.toolType === "kettlebell") {
+          const kbWeights = state.config.kbLevels || DEFAULT_CONFIG.kbLevels;
+          selectorHtml = `
+            <div class="equip-selector-bar">
+              <div class="selector-row">
+                <span class="selector-label">壺鈴段位:</span>
+                ${kbWeights.map(w => `
+                  <button class="pill-opt ${parseFloat(rec.weight) === w ? 'active' : ''}" 
+                    onclick="selectKbWeight('${ex.id}', ${w})">${w}kg</button>
+                `).join('')}
               </div>
-              <div class="sets-table">
+              <div class="rest-selector-row">
+                <span class="selector-label">組間休息:</span>
+                ${state.config.restOptions.map(r => `
+                  <button class="pill-opt ${restSec === r ? 'active' : ''}" 
+                    onclick="setExerciseRest('${ex.id}', ${r})">${r}s</button>
+                `).join('')}
+              </div>
+            </div>
           `;
+        } else if (ex.toolType === "band") {
+          const bandLevels = state.config.bandLevels || DEFAULT_CONFIG.bandLevels;
+          const bandRings = state.config.bandRings || DEFAULT_CONFIG.bandRings;
+          
+          let curBand = bandLevels[1];
+          let curRing = 3;
+          if (typeof rec.weight === "string" && rec.weight.includes("·")) {
+            const parts = rec.weight.split("·");
+            curBand = parts[0].trim();
+            const rMatch = parts[1].match(/\d+/);
+            if (rMatch) curRing = parseInt(rMatch[0]);
+          }
 
-          rec.sets.forEach((set, sIdx) => {
-            blockHtml += `
-              <div class="set-row">
-                <span class="set-num">第 ${sIdx + 1} 組</span>
-                <div class="set-inputs">
-                  <div class="input-pill">
-                    <button class="adj-btn" onclick="adjWeight('${ex.id}', -1)">-</button>
-                    <input type="text" value="${rec.weight}" onchange="setWeight('${ex.id}', this.value)" title="負重/阻力">
-                    <button class="adj-btn" onclick="adjWeight('${ex.id}', 1)">+</button>
-                  </div>
-                  <div class="input-pill">
-                    <button class="adj-btn" onclick="adjReps('${ex.id}', ${sIdx}, -1)">-</button>
-                    <input type="number" value="${set.reps}" onchange="setReps('${ex.id}', ${sIdx}, this.value)" title="次數">
-                    <span>下</span>
-                    <button class="adj-btn" onclick="adjReps('${ex.id}', ${sIdx}, 1)">+</button>
-                  </div>
-                </div>
-                <div class="set-action">
-                  <button class="check-btn ${set.done ? 'done' : ''}" onclick="toggleSetDone('${ex.id}', ${sIdx}, ${ex.restAfter})">
-                    ${set.done ? '✓ 完成' : '完成'}
-                  </button>
-                </div>
+          selectorHtml = `
+            <div class="equip-selector-bar">
+              <div class="selector-row">
+                <span class="selector-label">阻力強度:</span>
+                ${bandLevels.map(b => `
+                  <button class="pill-opt ${curBand === b ? 'active' : ''}" 
+                    onclick="selectBandConfig('${ex.id}', '${b}', ${curRing})">${b}</button>
+                `).join('')}
               </div>
-            `;
-          });
+              <div class="selector-row">
+                <span class="selector-label">扣環段位:</span>
+                ${bandRings.map(r => `
+                  <button class="pill-opt ${curRing === r ? 'active' : ''}" 
+                    onclick="selectBandConfig('${ex.id}', '${curBand}', ${r})">R${r}</button>
+                `).join('')}
+              </div>
+              <div class="rest-selector-row">
+                <span class="selector-label">組間休息:</span>
+                ${state.config.restOptions.map(r => `
+                  <button class="pill-opt ${restSec === r ? 'active' : ''}" 
+                    onclick="setExerciseRest('${ex.id}', ${r})">${r}s</button>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        } else {
+          // Bodyweight or general
+          selectorHtml = `
+            <div class="equip-selector-bar">
+              <div class="rest-selector-row" style="margin-top:0; padding-top:0; border-top:none;">
+                <span class="selector-label">組間休息:</span>
+                ${state.config.restOptions.map(r => `
+                  <button class="pill-opt ${restSec === r ? 'active' : ''}" 
+                    onclick="setExerciseRest('${ex.id}', ${r})">${r}s</button>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }
 
-          blockHtml += `</div></div>`;
-        });
-        return blockHtml;
+        return `
+          <div class="exercise-card" id="card-${ex.id}">
+            <div class="ex-header">
+              <div class="ex-title-wrap">
+                <div class="ex-title">
+                  ${ex.name} <span class="ex-tag">${ex.tag}</span>
+                </div>
+                <div class="cue-badges">${cueHtml}</div>
+                <button class="btn-toggle-guide" onclick="toggleGuideDrawer('${ex.id}')">
+                  ℹ️ 外部焦點與要領
+                </button>
+              </div>
+              <div class="card-order-controls">
+                <button class="icon-btn" onclick="moveExercise('${ex.id}', -1)" title="向上排序" ${fIdx === 0 ? 'disabled style="opacity:0.3;"' : ''}>▲</button>
+                <button class="icon-btn" onclick="moveExercise('${ex.id}', 1)" title="向下排序" ${fIdx === fTotal - 1 ? 'disabled style="opacity:0.3;"' : ''}>▼</button>
+              </div>
+            </div>
+
+            <div class="guide-drawer" id="guide-${ex.id}">
+              <div class="guide-block">
+                <div class="guide-label">🎯 外部焦點 (External Focus)</div>
+                <div class="guide-text">${ex.guide.focus}</div>
+              </div>
+              <div class="guide-block">
+                <div class="guide-label">🫁 呼吸引導</div>
+                <div class="guide-text">${ex.guide.breath}</div>
+              </div>
+              <div class="guide-block">
+                <div class="guide-label" style="color: #f87171;">⚠️ 安全紅線</div>
+                <div class="guide-text">${ex.guide.safety}</div>
+              </div>
+            </div>
+
+            ${selectorHtml}
+
+            <div class="sets-table">
+              ${rec.sets.map((set, sIdx) => `
+                <div class="set-row">
+                  <span class="set-num">第 ${sIdx + 1} 組</span>
+                  <div class="set-inputs">
+                    <div class="input-pill">
+                      <button class="adj-btn" onclick="adjWeight('${ex.id}', -1)">-</button>
+                      <input type="text" value="${rec.weight}" onchange="setWeight('${ex.id}', this.value)" title="負重/阻力">
+                      <button class="adj-btn" onclick="adjWeight('${ex.id}', 1)">+</button>
+                    </div>
+                    <div class="input-pill">
+                      <button class="adj-btn" onclick="adjReps('${ex.id}', ${sIdx}, -1)">-</button>
+                      <input type="number" value="${set.reps}" onchange="setReps('${ex.id}', ${sIdx}, this.value)" title="次數">
+                      <span>下</span>
+                      <button class="adj-btn" onclick="adjReps('${ex.id}', ${sIdx}, 1)">+</button>
+                    </div>
+                  </div>
+                  <div class="set-action">
+                    <button class="check-btn ${set.done ? 'done' : ''}" onclick="toggleSetDone('${ex.id}', ${sIdx}, ${restSec}, '${ex.name}')">
+                      ${set.done ? '✓ 完成' : '完成'}
+                    </button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
       };
 
-      html += renderGroup(tpl.block1Title, tpl.block1);
-      html += renderGroup(tpl.block2Title, tpl.block2);
+      // 1. 樓上區塊
+      const f1List = getExercisesForFloor(state.activeDay, "floor1");
+      html += `
+        <div class="floor-section floor-upstairs">
+          <div class="floor-header">
+            <span class="floor-title-badge badge-blue">🏠 2F 樓上區 · 彈力帶門錨 ＆ 墊上核心</span>
+            <span class="floor-hint">全部在樓上集中完成</span>
+          </div>
+          ${f1List.map((ex, idx) => renderCard(ex, idx, f1List.length)).join('')}
+        </div>
+      `;
+
+      // 2. 轉場提醒卡片
+      html += `
+        <div class="floor-transition-card">
+          <span class="icon">👟</span>
+          <span>樓上動作完成！請移動至 1F 樓下繼續進行壺鈴與有氧</span>
+        </div>
+      `;
+
+      // 3. 樓下區塊
+      const f2List = getExercisesForFloor(state.activeDay, "floor2");
+      html += `
+        <div class="floor-section floor-downstairs">
+          <div class="floor-header">
+            <span class="floor-title-badge badge-green">🏋️ 1F 樓下區 · 可調壺鈴 ＆ 健力腳踏車</span>
+            <span class="floor-hint">下肢重項、單側手臂與心肺</span>
+          </div>
+          ${f2List.map((ex, idx) => renderCard(ex, idx, f2List.length)).join('')}
+          
+          <!-- Zone 2 Cardio Block -->
+          <div class="zone2-card">
+            <h3 style="font-size: 1.05rem; margin-bottom: 4px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+              🚴 健力腳踏車 Zone 2 (18分鐘)
+            </h3>
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 8px;">
+              體感準則：鼻吸鼻呼 1:1 · 微喘但可說完整句子 · 踏頻 80–90 RPM
+            </p>
+
+            <div class="breath-circle-wrap">
+              <div class="breath-circle" id="breath-circle">
+                <span id="breath-text">準備吸氣</span>
+              </div>
+            </div>
+
+            <div style="font-family: var(--font-mono); font-size: 2.2rem; font-weight: 700; margin-bottom: 12px;" id="zone2-timer">
+              18:00
+            </div>
+
+            <div style="display: flex; justify-content: center; gap: 12px;">
+              <button class="btn btn-accent" id="btn-zone2-toggle" onclick="toggleZone2()">開始踩踏</button>
+              <button class="btn btn-secondary" onclick="resetZone2()">重置</button>
+            </div>
+          </div>
+        </div>
+      `;
+
       container.innerHTML = html;
 
       updateCompletionStats();
       checkDoubleProgressionNotice();
+      renderZone2Display();
     }
 
     function renderStatusNotice() {
@@ -1066,7 +1628,7 @@
       statusP.textContent = msg;
     }
 
-    function toggleSetDone(exId, setIdx, restAfter) {
+    function toggleSetDone(exId, setIdx, restAfter, exName) {
       if (!state.records[exId]) initExerciseRecord(exId);
       const set = state.records[exId].sets[setIdx];
       set.done = !set.done;
@@ -1076,27 +1638,58 @@
       if (set.done) {
         playBeep(880, 0.15);
         if (restAfter > 0) {
-          startRestTimer(restAfter);
+          startRestTimer(restAfter, exName);
         }
       }
     }
 
-    // 支援字串阻力階梯（彈力繩）與數值（壺鈴 kg）平滑增減
+    function selectKbWeight(exId, weightNum) {
+      if (!state.records[exId]) initExerciseRecord(exId);
+      state.records[exId].weight = `${weightNum}kg`;
+      saveState();
+      renderAll();
+    }
+
+    function selectBandConfig(exId, levelStr, ringNum) {
+      if (!state.records[exId]) initExerciseRecord(exId);
+      state.records[exId].weight = `${levelStr} · 第${ringNum}環`;
+      saveState();
+      renderAll();
+    }
+
+    function setExerciseRest(exId, sec) {
+      if (!state.records[exId]) initExerciseRecord(exId);
+      state.records[exId].restAfter = sec;
+      saveState();
+      renderAll();
+    }
+
     function adjWeight(exId, delta) {
       if (!state.records[exId]) initExerciseRecord(exId);
       const curVal = state.records[exId].weight;
 
-      if (typeof curVal === "string" && BAND_LEVELS.includes(curVal)) {
-        let idx = BAND_LEVELS.indexOf(curVal);
-        let nextIdx = Math.max(0, Math.min(BAND_LEVELS.length - 1, idx + delta));
-        state.records[exId].weight = BAND_LEVELS[nextIdx];
+      // 若為純數字或含 kg
+      let cur = parseFloat(curVal);
+      if (!isNaN(cur)) {
+        const kbWeights = state.config.kbLevels || DEFAULT_CONFIG.kbLevels;
+        const curKg = cur;
+        let idx = kbWeights.findIndex(w => w >= curKg);
+        if (idx === -1) idx = kbWeights.length - 1;
+        let nextIdx = Math.max(0, Math.min(kbWeights.length - 1, idx + delta));
+        state.records[exId].weight = `${kbWeights[nextIdx]}kg`;
       } else {
-        let cur = parseFloat(curVal);
-        if (isNaN(cur)) {
-          state.records[exId].weight = (delta > 0) ? BAND_LEVELS[2] : BAND_LEVELS[0];
-        } else {
-          state.records[exId].weight = Math.max(0, cur + delta * 2);
+        // 彈力帶調整環數
+        const bandLevels = state.config.bandLevels || DEFAULT_CONFIG.bandLevels;
+        let curBand = bandLevels[1];
+        let curRing = 3;
+        if (typeof curVal === "string" && curVal.includes("·")) {
+          const parts = curVal.split("·");
+          curBand = parts[0].trim();
+          const rMatch = parts[1].match(/\d+/);
+          if (rMatch) curRing = parseInt(rMatch[0]);
         }
+        let nextRing = Math.max(1, Math.min(7, curRing + delta));
+        state.records[exId].weight = `${curBand} · 第${nextRing}環`;
       }
       saveState();
       renderAll();
@@ -1122,19 +1715,20 @@
       saveState();
     }
 
-    // 正確從 TEMPLATES 繼承動作預設參數，避免抹除
     function initExerciseRecord(exId) {
       let matchedEx = null;
       for (const day of ['A', 'B']) {
-        const list = [...TEMPLATES[day].block1, ...TEMPLATES[day].block2];
+        const list = [...TEMPLATES[day].floor1.exercises, ...TEMPLATES[day].floor2.exercises];
         matchedEx = list.find(e => e.id === exId);
         if (matchedEx) break;
       }
-      const defaultW = matchedEx ? matchedEx.defaultWeight : 12;
+      const defaultW = matchedEx ? matchedEx.defaultWeight : "12kg";
       const defaultR = matchedEx ? matchedEx.defaultReps : 10;
+      const defaultRest = matchedEx ? matchedEx.defaultRest : 60;
 
       state.records[exId] = {
         weight: defaultW,
+        restAfter: defaultRest,
         sets: [
           { reps: defaultR, done: false },
           { reps: defaultR, done: false },
@@ -1147,7 +1741,7 @@
       let totalSets = 0;
       let doneSets = 0;
       const tpl = TEMPLATES[state.activeDay];
-      const allEx = [...tpl.block1, ...tpl.block2];
+      const allEx = [...tpl.floor1.exercises, ...tpl.floor2.exercises];
 
       allEx.forEach(ex => {
         const rec = state.records[ex.id];
@@ -1162,12 +1756,11 @@
       document.getElementById("completion-counter").textContent = `${doneSets} / ${totalSets} 組完成`;
     }
 
-    // 遍歷所有複合動作的雙重進階檢測
     function checkDoubleProgressionNotice() {
       const banner = document.getElementById("progress-banner");
       const bannerText = document.getElementById("progress-banner-text");
       const tpl = TEMPLATES[state.activeDay];
-      const allEx = [...tpl.block1, ...tpl.block2];
+      const allEx = [...tpl.floor1.exercises, ...tpl.floor2.exercises];
 
       const qualified = [];
       allEx.forEach(ex => {
@@ -1179,7 +1772,7 @@
 
       if (qualified.length > 0) {
         banner.style.display = "flex";
-        bannerText.textContent = `🔥 雙重進階達標：【${qualified.join('、')}】連續 3 組滿 12 下！下次可晉升阻力或拉長離心。`;
+        bannerText.textContent = `🔥 雙重進階達標：【${qualified.join('、')}】連續 3 組滿 12 下！下次可晉升阻力或增加負重。`;
       } else {
         banner.style.display = "none";
       }
@@ -1189,7 +1782,7 @@
       if (!confirm(`確定完結今日的【${state.activeDay}】課表嗎？\n完成後系統將自動為你切換至下一個輪替課表。`)) return;
 
       const tpl = TEMPLATES[state.activeDay];
-      const allEx = [...tpl.block1, ...tpl.block2];
+      const allEx = [...tpl.floor1.exercises, ...tpl.floor2.exercises];
 
       allEx.forEach(ex => {
         const rec = state.records[ex.id];
@@ -1216,15 +1809,32 @@
     }
 
     // ==========================================
-    // 8. BACKUP & RESTORE MODAL
+    // 8. BACKUP & SETTINGS MODAL
     // ==========================================
     function openBackupModal() {
+      document.getElementById("cfg-kb-weights").value = (state.config.kbLevels || DEFAULT_CONFIG.kbLevels).join(', ');
+      document.getElementById("cfg-band-levels").value = (state.config.bandLevels || DEFAULT_CONFIG.bandLevels).join(', ');
       document.getElementById("backup-modal").classList.add("open");
     }
+
     function closeBackupModal(e) {
       if (!e || e.target.id === "backup-modal") {
         document.getElementById("backup-modal").classList.remove("open");
       }
+    }
+
+    function saveCustomConfig() {
+      const kbStr = document.getElementById("cfg-kb-weights").value;
+      const bandStr = document.getElementById("cfg-band-levels").value;
+
+      const parsedKb = kbStr.split(',').map(s => parseFloat(s.trim())).filter(n => !isNaN(n));
+      if (parsedKb.length > 0) state.config.kbLevels = parsedKb;
+
+      const parsedBands = bandStr.split(',').map(s => s.trim()).filter(s => s.length > 0);
+      if (parsedBands.length > 0) state.config.bandLevels = parsedBands;
+
+      saveState();
+      renderAll();
     }
 
     function exportDataJson() {
@@ -1261,12 +1871,15 @@
     function resetAllDemoData() {
       if (confirm("警告：這將清空目前所有儲存的訓練記錄，確定要重置嗎？")) {
         localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem("WORKOUT_HUD_STORE_V2");
         state = {
           activeDay: "A",
           lastCompletedDay: null,
           lastCompletedTime: null,
           history: [],
-          records: {}
+          records: {},
+          customOrder: { A: [], B: [] },
+          config: JSON.parse(JSON.stringify(DEFAULT_CONFIG))
         };
         renderAll();
         closeBackupModal(null);
@@ -1276,7 +1889,6 @@
     // Initialize
     loadState();
     renderAll();
-    renderZone2Display();
   </script>
 </body>
 </html>
